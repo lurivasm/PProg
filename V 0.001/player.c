@@ -18,6 +18,7 @@ Player* create_player(){
   }
   return pl;
 }
+
   void delete_player(Player* pl){
    free(pl);
  }
@@ -33,6 +34,7 @@ Player* create_player(){
    if (pl->alcohol==100) return -1;
    return 0;
  }
+
  int change_state(Player* pl,int modifier){
    if (pl==NULL) return ERR;
    pl->state=modifier;
