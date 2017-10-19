@@ -18,7 +18,7 @@ Object *object_ini(void);
 void object_destroy(Object *o);
 
 /*Setting objects*/
-Object *object_set(Object *o, Type t, int r0, int r1, int take, int use);
+Object *object_set(Object *o, Type t, int r1, int take, int use);
 
 /*Read OBJECTS.TXT and create different objects depending on the line*/
 Object *object_read(Object *o, char *name, int key);
@@ -31,9 +31,6 @@ int object_use(Object *o);
 
 /*Returns 1 if you can take it and 0 if not*/
 int object_take(Object *o);
-
-/*Returns 1 if it increase your life, 0 if it does nothing and -1 if decreases your life*/
-int object_indecrease(Object *o);
 
 /*Returns how much the object increases or decreases your life*/
 int object_quantity(Object *o);
