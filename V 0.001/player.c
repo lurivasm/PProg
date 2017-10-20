@@ -40,3 +40,8 @@ Player* create_player(){
    pl->state=modifier;
    return OK;
  }
+
+ int player_state(Player *pl){
+    if (pl==NULL) return ERR;
+    return pl->state;
+ }

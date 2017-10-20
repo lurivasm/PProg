@@ -16,4 +16,6 @@ int is_dead(Player* pl);
 /*Informs about player's life (-1=Dead,0=Alive)*/
 int change_state(Player* pl,int modifier);
 /*Change player's state*/
+int player_state(Player *pl);
+/*Returns Player state*/
 #endif
