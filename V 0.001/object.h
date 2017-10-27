@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 /*We define this macro for all the possible errors in ints*/
-#define ERROR -2
+#define ERROR -1
 
 typedef struct _object Object;
 typedef enum {
