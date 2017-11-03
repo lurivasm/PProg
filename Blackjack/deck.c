@@ -58,9 +58,9 @@ Deck* shuffle(Deck *d){
   if(!d) return NULL;
   int i,aleat;
   Card *aux;
-  aux = create_card();
-  srand(time(NULL));
 
+  srand(time(NULL));
+  aux = create_card();
   for(i = 0;i < 52;i++){
     srand(rand());
     aleat = rand()%52;

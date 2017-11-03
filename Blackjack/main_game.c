@@ -7,12 +7,13 @@
 int main(int argc, char** argv) {
 
     Deck *d;
-    char card[1],round[1],ace[2];
-    int croupier=0,asv,points=0,cc;   /*asv is used to choose the value of an ace*/
+    char card[1],round[1],ace[2],smoke[1];
+    int croupier=0,asv,points=0,cc;   /*asv is used to choose the value of an ace. cc is used to count the cards*/
     d = create_deck();
     if (!d) return 0;
     d = set_deck(d);
     if (!d) return 0;
+    srand(time(NULL));
 
     printf("Let's start playing\n");
 
@@ -60,6 +61,22 @@ int main(int argc, char** argv) {
 
          if(points <=21){
            printf("Now is Santi's turn. ");
+           if(rand()%10 ==0){
+             printf("But Santi wants to smoke first.");
+             while(1){
+               printf(" Do you want to smoke with him?[Y/N]: ");
+               fgets(smoke,10,stdin);
+               if(*smoke != 'Y' && *smoke != 'N') continue;
+               break;
+             }
+             if(*smoke == 'Y'){
+               printf("Your alcohol level decreases because of the cigarette! Now let's play\n");
+             }
+             else{
+               printf("Now let's play\n");
+             }
+           }
+
           croupier=0;
           while(croupier<17){
 
@@ -68,8 +85,7 @@ int main(int argc, char** argv) {
              printf("Santi's card is ");
              print_card(deck_get_card(d,cc),stdout);
              if(card_get_value(deck_get_card(d,cc)) == 1){
-               srand(rand());
-               if(rand()%4 == 0){
+               if(rand()%2 == 0){
                  printf(" Real Value 11\n");
                  croupier+=(card_get_value(deck_get_card(d,cc)) + 10);
                }
@@ -112,6 +128,7 @@ int main(int argc, char** argv) {
         if(*round == 'Y') continue;
         else break;
     }
+    delete_deck(d);
     printf("Thanks for playing\n");
     return 1;
   }

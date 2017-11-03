@@ -63,16 +63,15 @@ void print_card(Card *c,FILE *f){
 }
 
 Card* card_copy(Card *c1, Card *c2){
+  Card *caux;
   if(!c1) return NULL;
   if(!c2) return NULL;
   if(c1->value ==-1){
     c1 = set_card(c1,c2->name,c2->suit,c2->value);
     return c1;
   }
-
-  strcpy(c1->name,c2->name);
-  strcpy(c1->suit,c2->suit);
-  c1->value = c2->value;
-
-  return c1;
+  delete_card(c1);
+  caux = create_card();
+  caux = set_card(caux,c2->name,c2->suit,c2->value);
+  return caux;
 }
