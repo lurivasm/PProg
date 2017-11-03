@@ -1,8 +1,6 @@
 /*DECRYPT VIC'S MESSAGE*/
 /*All the int functions return -1 or ERR in case of memory error*/
 #include "message.h"
-#define WIN 10
-#define LOOSE -10
 
 struct _message{
   char *coded;           /*The coded message*/
@@ -51,8 +49,17 @@ void message_destroy(Message *m){
 }
 
 
+void message_array_destroy(Message **m){
+  if(!m) return;
+  int i;
+
+  for(i = 0; i < 10; i++) message_destroy(m[i]);
+  free(m);
+}
+
+
 int message_set(Message **m, char *file){
-  if(!f) return ERR;
+  if(!file) return ERR;
   int i = 0, j;
 
   FILE *f;
@@ -66,7 +73,7 @@ int message_set(Message **m, char *file){
       fclose(f);
       return ERR;
     }
-    fscanf(f, "%d %s %s\n", m+i->num, m+i->coded, m+i->decoded);
+    fscanf(f, "%d %s %s\n", m[i]->num, m[i]->coded, m[i]->decoded);
     i++;
   }
   fclose(f);
@@ -77,19 +84,73 @@ int message_set(Message **m, char *file){
 /*It returns 0 if they are exactly the same and 1 if they're not*/
 int message_compare(Message *m, char* answer){
   if(!m || !answer) return ERR;
-  if(strcmp(m,answer) == 0) return 0;
-  return 1;
+   return (strcmp(m->decoded, answer) == 0) ? 0 : 1;
+}
+
+
+Game *game_ini(){
+  Game *g;
+  g = (Game*)malloc(sizeof(Game));
+  if(!g) return NULL;
+
+  if(message_set(g->m, "~/Decrypte Vic's message/Messages.txt") == ERR) return NULL;
+  g->correct = 0;
+  g->incorrect = 0;
+  return g;
 }
 
 
 int message_game(){
-  int correct = 0, incorrect = 0, comp, i;
-  Game *g = (Game*)malloc(sizeof(Game));
-  if(!g) return ERR;
+  int comp, i;
+  char *answer;
+  Game *g;
 
-  if(message_set(g->m, "~/Decrypte Vic's message/Messages.txt") == ERR) return ERR;
-  for(i = 0; i <= 10; i++){
+  answer = (char*)malloc(sizeof(char)+1);
+  if(!answer) return ERR;
 
+  g = game_ini();
+  if(!g) {
+    free(answer);
+    return ERR;
   }
 
+
+  for(i = 0; i < 10; i++){
+    fprint(stdout, "\nVic: %s\nYou: ", g->m[i]->coded);
+    fscanf(stdin, "%s\n", answer);
+
+    comp = message_compare(g->m[i], answer);
+
+    /*Case of error*/
+    if(comp == ERR) {
+      message_array_free(g->m);
+      free(g);
+      free(answer);
+      return ERR;
+    }
+
+    /*The answer is incorrect*/
+    if(comp == 1){
+      fprintf(stdout, "Vic(angry): 'That 'snot whatIa mtellingu!'\n");
+      g->incorrect++;
+      if(g->incorrect == 3){
+        fprintf(stdout, "Vic(much more angrier): 'Ohh f*** offu idsiot\n\n");
+        message_array_free(g->m);
+        free(g);
+        free(answer);
+        return LOOSE;
+      }
+      continue;
+    }
+
+    /*Rest case when the answer is correct*/
+    fprintf(stdout, "Vic(cute): 'Ieees, in plan roll uknow'\n");
+    g->correct++;
+  }
+
+  fprintf(stdout, "Vic(happy): 'Yove underssthan %d of maisentencs:)'\n", g->correct);
+  message_array_free(g->m);
+  free(g);
+  free(answer);
+  return WIN;
 }
