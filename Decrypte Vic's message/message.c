@@ -5,7 +5,6 @@
 struct _message{
   char *coded;           /*The coded message*/
   char *decoded;         /*The decoded message*/
-  int num;               /*The number of the message*/
 };
 
 struct _game{
@@ -20,7 +19,6 @@ Message *message_ini(){
 
   m->coded = NULL;
   m->decoded = NULL;
-  m->num = 0;
   return m;
 }
 
@@ -61,21 +59,43 @@ void message_array_destroy(Message **m){
 int message_set(Message **m, char *file){
   if(!file) return ERR;
   int i = 0, j;
-
+  char *aux;
   FILE *f;
+
   f = fopen(file,"r");
   if(!f) return ERR;
 
-  while(!feof(f)){
+  aux = (char*)malloc(sizeof(char)*500);
+  if(!aux){
+    fclose(f);
+    return ERR;
+  }
+
+  while(!feof(f) && i < 10){
     m[i] = message_ini();
     if(m[i] == NULL){
       for(j = i -1; j == 0; j--) message_destroy(m[i]);
       fclose(f);
       return ERR;
     }
-    fscanf(f, "%d %s %s\n", m[i]->num, m[i]->coded, m[i]->decoded);
+    fgets(aux, 500, f);
+
+    m[i]->coded = strtok(aux, "/");
+    if(!m[i]->coded){
+      free(aux);
+      fclose(f);
+      return ERR;
+    }
+
+    m[i]->decoded = strtok(NULL, "/");
+    if(!m[i]->decoded){
+      free(aux);
+      fclose(f);
+      return ERR;
+    }
     i++;
   }
+  free(aux);
   fclose(f);
   return 1;
 }
@@ -88,42 +108,47 @@ int message_compare(Message *m, char* answer){
 }
 
 
-Game *game_ini(){
+Game *game_ini(char *file){
+  if(!file) return NULL;
+
   Game *g;
   g = (Game*)malloc(sizeof(Game));
   if(!g) return NULL;
 
-  if(message_set(g->m, "~/Decrypte Vic's message/Messages.txt") == ERR) return NULL;
+  if(message_set(g->m, file) == ERR) return NULL;
   g->correct = 0;
   g->incorrect = 0;
+
   return g;
 }
 
 
-int message_game(){
+int message_game(char *file){
+  if(!file) return ERR;
+
   int comp, i;
   char *answer;
   Game *g;
 
-  answer = (char*)malloc(sizeof(char)+1);
+  answer = (char*)malloc(sizeof(char)*200);
   if(!answer) return ERR;
 
-  g = game_ini();
+  g = game_ini(file);
   if(!g) {
     free(answer);
     return ERR;
   }
 
-
   for(i = 0; i < 10; i++){
-    fprint(stdout, "\nVic: %s\nYou: ", g->m[i]->coded);
-    fscanf(stdin, "%s\n", answer);
+    fprintf(stdout, "%s\n", g->m[i]->decoded);
+    fprintf(stdout, "\nVic: %s\nYou: ", g->m[i]->coded);
+    fgets(answer, 100, stdin);
 
     comp = message_compare(g->m[i], answer);
 
     /*Case of error*/
     if(comp == ERR) {
-      message_array_free(g->m);
+      message_array_destroy(g->m);
       free(g);
       free(answer);
       return ERR;
@@ -134,8 +159,8 @@ int message_game(){
       fprintf(stdout, "Vic(angry): 'That 'snot whatIa mtellingu!'\n");
       g->incorrect++;
       if(g->incorrect == 3){
-        fprintf(stdout, "Vic(much more angrier): 'Ohh f*** offu idsiot\n\n");
-        message_array_free(g->m);
+        fprintf(stdout, "Vic(much more angrier): 'Ohh f*** offu idsiot xddd'\n\n");
+        /*AQUI PETA message_array_destroy(g->m);*/
         free(g);
         free(answer);
         return LOOSE;
@@ -144,12 +169,12 @@ int message_game(){
     }
 
     /*Rest case when the answer is correct*/
-    fprintf(stdout, "Vic(cute): 'Ieees, in plan roll uknow'\n");
+    fprintf(stdout, "Vic(cute): 'Ieees, in plan uknow xddd'\n");
     g->correct++;
   }
 
   fprintf(stdout, "Vic(happy): 'Yove underssthan %d of maisentencs:)'\n", g->correct);
-  message_array_free(g->m);
+  message_array_destroy(g->m);
   free(g);
   free(answer);
   return WIN;

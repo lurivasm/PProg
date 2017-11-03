@@ -3,19 +3,28 @@
 #include <string.h>
 
 void main(void){
-  int n, i;
-  char *a, *b;
+  char *a, *b, *aux;
+  int n;
 
-
+//  a = (char*)malloc(sizeof(char)*20);
+//  b = (char*)malloc(sizeof(char)*20);
+  aux = (char*)malloc(sizeof(char)*2000);
   FILE *f;
-  f = fopen("/home/lurivasm/Documents/PPROG/PProg/PProg/Decrypte Vic's message/messages.txt","r");
-  if(!f) return;
+  f = fopen("messages.txt","r");
+
 
   while(!feof(f)){
-    fscanf(f, "%d", &n);
-    for(i = 0; i <= n; i++) fscanf(f, "%c", a+i);
-    for(i = 0; i <= n; i++) fscanf(f, "%c", b+i);
-    fprintf(stdout, "%d %s %s", n, a, b);
-  }
+    fgets(aux, 50, f);
+    if (strlen(aux)>3) {
+        fprintf(stdout, "%s\n", aux);
+     a = strtok(aux, "/");
+        b = strtok(NULL, "/");
+      fprintf(stdout, "%s  %s\n", a, b);
+    }
+}
+
   fclose(f);
+//  free(a);
+//  free(b);
+  free(aux);
 }

@@ -28,9 +28,9 @@ int message_set(Message **m, char *f);
 int message_compare(Message *m, char* answer);
 
 /*Inicialization of a game struct with the array of sentences*/
-Game *game_ini();
+Game *game_ini(char *file);
 
 /*The minigame*/
-int message_game();
+int message_game(char *file);
 
 #endif
