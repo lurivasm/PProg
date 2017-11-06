@@ -13,6 +13,7 @@ struct _game{
 };
 
 
+/***************************************************************/
 Message *message_ini(){
   Message *m = (Message*)malloc(sizeof(Message));
   if(!m) return NULL;
@@ -23,6 +24,7 @@ Message *message_ini(){
 }
 
 
+/***************************************************************/
 void message_destroy(Message *m){
   if(!m) return;
   if(!m->coded){
@@ -47,6 +49,7 @@ void message_destroy(Message *m){
 }
 
 
+/***************************************************************/
 void message_array_destroy(Message **m){
   if(!m) return;
   int i;
@@ -56,10 +59,11 @@ void message_array_destroy(Message **m){
 }
 
 
+/***************************************************************/
 int message_set(Message **m, char *file){
   if(!file) return ERR;
   int i = 0, j;
-  char *aux;
+  char *aux, *auxcoded, *auxdecoded;
   FILE *f;
 
   f = fopen(file,"r");
@@ -71,30 +75,52 @@ int message_set(Message **m, char *file){
     return ERR;
   }
 
+
   while(!feof(f) && i < 10){
     m[i] = message_ini();
     if(m[i] == NULL){
       for(j = i -1; j == 0; j--) message_destroy(m[i]);
+      free(aux);
+      free(auxcoded);
+      free(auxdecoded);
       fclose(f);
       return ERR;
     }
-    fgets(aux, 500, f);
-
-    m[i]->coded = strtok(aux, "/");
+    m[i]->coded = (char*)malloc(sizeof(char)*500);
     if(!m[i]->coded){
       free(aux);
       fclose(f);
       return ERR;
     }
 
-    m[i]->decoded = strtok(NULL, "/");
+    m[i]->decoded = (char*)malloc(sizeof(char)*500);
     if(!m[i]->decoded){
+      free(aux);
+      free(m[i]->coded);
+      fclose(f);
+      return ERR;
+    }
+
+    fgets(aux, 500, f);
+
+    auxcoded = strtok(aux, "/");
+    if(!auxcoded){
       free(aux);
       fclose(f);
       return ERR;
     }
+
+    auxdecoded = strtok(NULL, "/");
+    if(!auxdecoded){
+      free(aux);
+      fclose(f);
+      return ERR;
+    }
+    strcpy(m[i]->coded, auxcoded);
+    strcpy(m[i]->decoded, auxdecoded);
     i++;
   }
+
   free(aux);
   fclose(f);
   return 1;
@@ -108,6 +134,7 @@ int message_compare(Message *m, char* answer){
 }
 
 
+/***************************************************************/
 Game *game_ini(char *file){
   if(!file) return NULL;
 
@@ -122,7 +149,7 @@ Game *game_ini(char *file){
   return g;
 }
 
-
+/***************************************************************/
 int message_game(char *file){
   if(!file) return ERR;
 
@@ -140,7 +167,10 @@ int message_game(char *file){
   }
 
   for(i = 0; i < 10; i++){
-    fprintf(stdout, "%s\n", g->m[i]->decoded);
+
+    fprintf(stdout, "%s\n", g->m[i]->coded);
+  }
+  for(i = 0; i < 10; i++){
     fprintf(stdout, "\nVic: %s\nYou: ", g->m[i]->coded);
     fgets(answer, 100, stdin);
 
@@ -174,7 +204,7 @@ int message_game(char *file){
   }
 
   fprintf(stdout, "Vic(happy): 'Yove underssthan %d of maisentencs:)'\n", g->correct);
-  message_array_destroy(g->m);
+  /*message_array_destroy(g->m); AQUI TAMBIEN PETA Y NO SE POR QUE COÑO*/
   free(g);
   free(answer);
   return WIN;

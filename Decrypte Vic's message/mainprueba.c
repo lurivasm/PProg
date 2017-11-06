@@ -5,7 +5,7 @@
 void main(void){
   int a;
 
-a = message_game("/home/alumnos/e359558/Desktop/Decrypte Vic's message/messages.txt");
+a = message_game("/home/lurivasm/Documents/PPROG/Decrypte Vic's message/messages.txt");
 
   if( a == ERR) printf("\n\nerror");
   if( a == WIN) printf("\n\nganaste");
