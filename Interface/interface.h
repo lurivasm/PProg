@@ -37,4 +37,7 @@ int draw_board(Interface *i, int clear) ;
 
 int move (Interface *i,int direction);
 
+int _read_key(); 
+
+
 #endif
