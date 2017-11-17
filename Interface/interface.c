@@ -97,3 +97,36 @@ int _read_key() {
   else
     return choice;
 }
+
+int* create_map(char *file,char **map){
+	if (file==NULL || map==NULL) return NULL;
+	FILE *f;
+	f=fopen(file,"r");
+	if (f==NULL){
+		return NULL;
+	}
+	int *size;
+	char buf[1000];
+	int rows = atoi(fgets(buf, 1000, f));
+	int cols = atoi(strchr(buf, ' ')+1);
+
+	map=(char**)malloc(sizeof(char*)*rows);
+	size=(int*)malloc(sizeof(int)*2);
+	for(int r=0;r<rows;r++){
+		map[r]=(char*)malloc(cols+1);
+		fgets(buf, 1000, f);
+		int k=0;
+		if (buf[strlen(buf)] == '\n')
+			buf[strlen(buf)] = 0;
+		for (;k<strlen(buf); k++)
+			map[r][k] = buf[k];
+		for (;k<cols; k++)
+			map[r][k] = ' ';
+		map[r][k] = 0;
+	}
+
+	fclose(f);
+	size[0]=rows;
+	size[1]=cols;
+	return size;
+}

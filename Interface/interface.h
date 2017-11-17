@@ -1,6 +1,18 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
- 
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <malloc.h>
+#include <time.h>
+#include <unistd.h>
+
+
+#include <termios.h>
+#include <pthread.h>
+
 #include "rectangles.h"
 
 #define BACKGROUND 40
@@ -37,7 +49,9 @@ int draw_board(Interface *i, int clear) ;
 
 int move (Interface *i,int direction);
 
-int _read_key(); 
+int _read_key();
+
+int* create_map(char *file,char **map); 
 
 
 #endif

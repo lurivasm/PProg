@@ -46,7 +46,8 @@ void main(){
 	int mover;
 	int j=0;
 	char** map;
-	f=fopen("prueba","r");
+	int *size;
+	/*f=fopen("prueba","r");
 	if (f==NULL){
 		printf("falla lectura\n");
 		return;
@@ -70,10 +71,11 @@ void main(){
 	}
 
 	fclose(f);
-
-	i=inter_create(rows,cols);
+	*/
+	size=create_map("prueba",map);
+	i=inter_create(size[0],size[1]);
 	set_player(i,'c',3,33);
-	set_board(i,map,rows,cols);
+	set_board(i,map,size[0],size[1]);
 	draw_board(i,1);
 	_term_init();
 	while (1){
