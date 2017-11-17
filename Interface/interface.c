@@ -56,14 +56,16 @@ int draw_board(Interface* i, int clear){
 }
 
 static int Dr[5] = {-1, 1, 0, 0, 0};
-static int Dc[5] = {0, 0, 1, -1, 0}; 
+static int Dc[5] = {0, 0, 1, -1, 0};
 int move(Interface *i,int direction){
 	if (i==NULL||direction>4||direction<0) return -3;
 	int r,c;
 	r=i->player_row+Dr[direction];
 	c=i->player_column+Dc[direction];
 	if(r<0||c<0||r>=i->rows||c>=i->columns) return -2;
-	if (i->map[r][c]!=' ') return -1;
+	if (i->map[r][c]!=' ') {
+		return -1;
+	}
 	win_write_char_at(i->board,i->player_row,i->player_column,' ');
 	i->player_column=c;
 	i->player_row=r;
@@ -95,5 +97,3 @@ int _read_key() {
   else
     return choice;
 }
-
-
