@@ -63,7 +63,7 @@ void main(){
 		int k=0;
 		if (buf[strlen(buf)] == '\n')
 			buf[strlen(buf)] = 0;
-		for (;k<strlen(buf); k++)
+		for (;k<strlen(buf) && k<cols; k++)
 			map[r][k] = buf[k];
 		for (;k<cols; k++)
 			map[r][k] = ' ';
@@ -72,6 +72,7 @@ void main(){
 
 	fclose(f);
 	*/
+	
 	size=create_map("prueba",map);
 	i=inter_create(size[0],size[1]);
 	set_player(i,'c',3,33);

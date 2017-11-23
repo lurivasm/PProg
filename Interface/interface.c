@@ -52,7 +52,7 @@ int draw_board(Interface* i, int clear){
 		win_write_line_at(i->board,j,0,i->map[j]);
 	}
 	win_write_char_at(i->board,i->player_row,i->player_column,i->player);
-	return 0;
+	return 1;
 }
 
 static int Dr[5] = {-1, 1, 0, 0, 0};
@@ -99,10 +99,11 @@ int _read_key() {
 }
 
 int* create_map(char *file,char **map){
-	if (file==NULL || map==NULL) return NULL;
+	if (file==NULL) return NULL;
 	FILE *f;
 	f=fopen(file,"r");
 	if (f==NULL){
+		printf("No existe el archivo\n");
 		return NULL;
 	}
 	int *size;
@@ -118,7 +119,7 @@ int* create_map(char *file,char **map){
 		int k=0;
 		if (buf[strlen(buf)] == '\n')
 			buf[strlen(buf)] = 0;
-		for (;k<strlen(buf); k++)
+		for (;k<strlen(buf) && k<cols; k++)
 			map[r][k] = buf[k];
 		for (;k<cols; k++)
 			map[r][k] = ' ';
@@ -126,7 +127,9 @@ int* create_map(char *file,char **map){
 	}
 
 	fclose(f);
-	size[0]=rows;
-	size[1]=cols;
+	(*size)=rows;
+	size++;
+	(*size)=cols;
+	size--;
 	return size;
 }
