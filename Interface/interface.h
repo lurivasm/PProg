@@ -51,7 +51,7 @@ int move (Interface *i,int direction);
 
 int _read_key();
 
-int* create_map(char *file,char **map); 
+char **create_map(char *file,int *size); 
 
 
 #endif

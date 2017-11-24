@@ -98,21 +98,19 @@ int _read_key() {
     return choice;
 }
 
-int* create_map(char *file,char **map){
-	if (file==NULL) return NULL;
+char **create_map(char *file,int *size){
+	if (file==NULL) return 0;
 	FILE *f;
 	f=fopen(file,"r");
 	if (f==NULL){
 		printf("No existe el archivo\n");
-		return NULL;
+		return 0;
 	}
-	int *size;
 	char buf[1000];
 	int rows = atoi(fgets(buf, 1000, f));
 	int cols = atoi(strchr(buf, ' ')+1);
 
-	map=(char**)malloc(sizeof(char*)*rows);
-	size=(int*)malloc(sizeof(int)*2);
+	char **map=(char**)malloc(sizeof(char*)*rows);
 	for(int r=0;r<rows;r++){
 		map[r]=(char*)malloc(cols+1);
 		fgets(buf, 1000, f);
@@ -127,9 +125,7 @@ int* create_map(char *file,char **map){
 	}
 
 	fclose(f);
-	(*size)=rows;
-	size++;
-	(*size)=cols;
-	size--;
-	return size;
+	size[0]=rows;
+	size[1]=cols;
+	return map;
 }
