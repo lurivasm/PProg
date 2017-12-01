@@ -14,6 +14,7 @@
 
 #include "interface.h"
 int mane(char* file);
+void ck_count(int max);
 #endif
 
 

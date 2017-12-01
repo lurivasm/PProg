@@ -1,6 +1,6 @@
 #include "mane.h"
 
 void main(){
-	mane("1.txt");
+	ck_count(20);
 	return;
 }

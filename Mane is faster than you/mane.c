@@ -1,5 +1,6 @@
 #include "interface.h"
 #include "mane.h"
+#include <time.h>
 
 struct termios initial;
 
@@ -29,7 +30,17 @@ void _term_init() {
 						    terminal. TCSANOW tells the program not to wait
 						    before making this change*/
 }
-
+void ck_count(int max){
+	time_t itime;
+	itime=time(NULL);
+	while(1){
+		time_t instant;
+		instant=time(NULL);
+		if (instant-itime>max){
+			return;
+		}
+	}
+}
 int mane(char* file){
 	if (file==NULL) return 1;
 	Interface *maze;
