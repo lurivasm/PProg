@@ -1,10 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
-#include "message.h"
+#include <malloc.h>
+#include <time.h>
+#include <unistd.h>
+
+
+#include <termios.h>
+#include <pthread.h>
 #include "interface.h"
 
 struct termios initial;
+
 void _term_init() {
 	struct termios new;	          /*a termios structure contains a set of attributes about
 					  how the terminal scans and outputs data*/
@@ -32,37 +40,34 @@ void _term_init() {
 						    before making this change*/
 }
 
-void main(void){
-  char **map;
-  FILE *f;
-  int mover;
-  int j=0;
-  Interface *above, *under, *right; /*The name is de position of the rectangle*/
-  int size[2];
+void main(){
+	Interface* i;
+	FILE *f;
+	int mover;
+	int j=0;
+	char** map;
+	int size[2];
 
-  map = create_map("vic.txt", size);
-  if(map == NULL) {
-    fprintf(stdout, "\nError en el fichero");
-    return;
-  }
 
-  above = inter_create(0, 0, size[0],size[1]);
-  set_board(i, map, size[0], size[1]);
-  draw_board(i,1);
-  _term_init();
-  while (1){
-    mover=_read_key();
-    fflush(stdout);
+	map = create_map("modelo.txt",size);
+	i=inter_create(0, 0, size[0],size[1]);
+	set_player(i,'c',3,33);
+	set_board(i,map,size[0],size[1]);
+	draw_board(i,1);
+	_term_init();
+	while (1){
+		mover=_read_key();
+		fflush(stdout);
 
-    if (mover == 'q') {
+		if (mover == 'q') {
       tcsetattr(fileno(stdin), TCSANOW, &initial);	/*We now restore the settings we back-up'd
-                so that the termial behaves normally when
-                the program ends */
+							  so that the termial behaves normally when
+							  the program ends */
       return;
     }
-    move(i,-mover);
-    fflush(stdout);
-  }
-  inter_delete(i);
-  return;
+		move(i,-mover);
+		fflush(stdout);
+	}
+	inter_delete(i);
+	return;
 }

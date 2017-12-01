@@ -12,6 +12,8 @@ Interface * inter_create(int r1, int c1, int rows, int columns){
 	i->player = '0';
 	i->player_row = 0;
 	i->player_column = 0;
+	i->r1 = r1;
+	i->c1 = c1;
 	fprintf(stdout, "%c[2J", 27);
 	return i;
 };
@@ -100,19 +102,20 @@ int _read_key() {
 }
 
 char **create_map(char *file, int *size){
-	if (file == NULL) return 0;
+	if (file == NULL) return NULL;
 	FILE *f;
+	int r;
 	f = fopen(file,"r");
 	if (f == NULL){
 		printf("No existe el archivo\n");
-		return 0;
+		return NULL;
 	}
 	char buf[1000];
 	int rows = atoi(fgets(buf, 1000, f));
 	int cols = atoi(strchr(buf, ' ')+1);
 
 	char **map=(char**)malloc(sizeof(char*)*rows);
-	for(int r = 0; r < rows; r++){
+	for(r = 0; r < rows; r++){
 		map[r] = (char*)malloc(cols + 1);
 		fgets(buf, 1000, f);
 		int k = 0;

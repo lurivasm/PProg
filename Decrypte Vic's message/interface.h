@@ -26,10 +26,10 @@
 #define HERE     4
 
 typedef struct {
-	int r1;
-	int c1;
-	int rows;
-	int columns;
+	int r1;		/*Fila inicial*/
+	int c1;		/*Columna inicial*/
+	int rows;    /*Numero de filas*/
+	int columns; /*Numero de columnas*/
 	sc_rectangle* board;    /*Rectangulos en los que dividimos la pantalla*/
 	int map_rows;
 	int map_columns;
@@ -49,7 +49,7 @@ int set_player(Interface* i,char player,int row,int column);
 void inter_delete(Interface*i);
 
 /*Establece la columnas y filas del mapa principal*/
-int set_board(Interface* i,char **board,int row,int columns);
+int set_board(Interface* i, char **board, int row, int columns);
 
 /**/
 int draw_board(Interface *i, int clear);
