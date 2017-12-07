@@ -10,6 +10,7 @@
 #include <termios.h>
 #include <pthread.h>
 #include "interface.h"
+#include "blackjack.h"
 
 
 struct termios initial;
@@ -111,8 +112,7 @@ void main(){
 	draw_board(i,1);
 	draw_text(i,1);
 
-	
-
+Blackjack(i);
 
 
 	while(1){

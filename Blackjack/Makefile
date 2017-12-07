@@ -1,6 +1,6 @@
-CC = gcc -ansi -pedantic
+CC = gcc -ansi -pedantic -std=c99
 CFLAGS = -Wall -g
-EXE = main_game
+EXE = main_titulo_Blackjack
 
 all : $(EXE)
 
@@ -8,12 +8,12 @@ all : $(EXE)
 clean :
 	rm -f *.o core $(EXE)
 
-$(EXE) : % : %.o card.o deck.o
+$(EXE) : % : %.o card.o deck.o blackjack.o interface.o rectangles.o
 	@echo "#---------------------------"
 	@echo "# Generando $@ "
 	@echo "# Depende de $^"
 	@echo "# Ha cambiado $<"
-	$(CC) $(CFLAGS) -o $@ $@.o card.o deck.o
+	$(CC) $(CFLAGS) -o $@ $@.o card.o deck.o blackjack.o interface.o rectangles.o
 
 card.o :card.c card.h
 	@echo "#---------------------------"
@@ -29,6 +29,23 @@ card.o :card.c card.h
 	@echo "# Ha cambiado $<"
 	$(CC) $(CFLAGS) -c $<
 
- 
+blackjack.o: blackjack.c blackjack.h
+	@echo "#----------------------------"
+	@echo "# Generando $@"
+	@echo "# Depende de $^"
+	@echo "# Ha cambiado $<"
+	$(CC) $(CFLAGS) -c $<
 
+inteface.o: interface.c interface.
+	@echo "#----------------------------"
+	@echo "# Generando $@"
+	@echo "# Depende de $^"
+	@echo "# Ha cambiado $<"
+	$(CC) $(CFLAGS) -c $<
 
+rectangles.o: rectangles.c rectangles.h
+	@echo "#----------------------------"
+	@echo "# Generando $@"
+	@echo "# Depende de $^"
+	@echo "# Ha cambiado $<"
+	$(CC) $(CFLAGS) -c $<
