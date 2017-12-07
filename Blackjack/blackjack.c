@@ -2,26 +2,41 @@
 
 #include "blackjack.h"
 
+int draw_card(sc_rectangle* b,int row ,int column ,char *value){
+  if(!b) return 0;
+  char aux[10];
 
+
+  win_write_line_at(b,row,column," __ ");
+  if(strcmp(value,"10")==0) sprintf(aux,"|%s|",value);
+  else sprintf(aux,"|%s |",value);
+
+  win_write_line_at(b,row+1,column,aux);
+  win_write_line_at(b,row+2,column,"|__|");
+  return 1;
+}
 
 int Blackjack(Interface *i) {
 
     Deck *d;
-    char ace[2],p[3],aux[512];
-    int croupier=0,asv,points=0,cc,card,smoke,round;   /*asv is used to choose the value of an ace. cc is used to count the cards*/
+    char p[3],aux[512];
+    int croupier=0,asv,points=0,cc,card,smoke,round,ace;   /*asv is used to choose the value of an ace. cc is used to count the cards*/
     d = create_deck();
     if (!d) return 0;
     d = set_deck(d);
     if (!d) return 0;
     srand(time(NULL));
 
-    sc_rectangle *t,*s;
+    sc_rectangle *t,*s,*b;
     t = get_text(i);
     s = get_score(i);
+    b = get_board(i);
     win_write_line_at(t,4,4,"Let's start playing");
 
     win_write_line_at(s,4,4,"Your points :");
     win_write_line_at(s,6,4,"Santi's points :");
+
+    draw_card(b,16,18,"10");
 
 
     usleep(2000000);
@@ -40,15 +55,15 @@ int Blackjack(Interface *i) {
            win_write_line_at(t,4,4,"Your card is  ");
            print_card(deck_get_card(d,cc),stdout);
           if(card_get_value(deck_get_card(d,cc))==1){
-              /* while(1){
+               while(1){
 
-               printf("You want it to value 1 or 11?: ");
-               fgets(ace,10,stdin);
-               asv = atoi(ace);
-               if(asv != 1 && asv !=11) continue;
-               points += asv;
+               win_write_line_at(t,5,4,"You want it to value 11?[y/n]: ");
+               ace = _read_key();
+               if(ace != 1 && ace !=11) continue;
+               if(ace =='y') points+=11;
+               else points+=1;
                break;
-             }*/
+             }
            }
            else{
                points+=card_get_value(deck_get_card(d,cc));

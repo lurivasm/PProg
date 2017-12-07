@@ -53,6 +53,8 @@ typedef struct {
 
 void _term_init();
 
+
+/*i=inter_create(33,114,0,0,0,86,22,0);*/
 Interface * inter_create(int rows,int columns,int rb,int cb,int rs,int cs,int rt,int ct);
 
 int set_player(Interface* i,char player,int row,int column);
