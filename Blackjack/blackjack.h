@@ -7,5 +7,7 @@
 
 int Blackjack(Interface *i);
 
+int Blackjack_hard(Interface *i);
+
 
 #endif

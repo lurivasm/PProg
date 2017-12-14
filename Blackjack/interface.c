@@ -3,7 +3,7 @@
 
 
 
-
+/*inter_create(33,114,0,0,0,86,22,0)*/
 Interface * inter_create(int rows,int columns,int rb,int cb,int rs,int cs,int rt,int ct){
 	if (rows<=0||columns<=0) return NULL;
 	Interface* i;

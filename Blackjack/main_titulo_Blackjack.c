@@ -51,10 +51,10 @@ void main(){
 	char** board;
 	char** score;
 	char** text;
-	int sizeb[2],sizes[2],sizet[2];
+	int sizeb[2],sizes[2],sizet[2],mode;
 
 
-
+ /*We create the maps for the board,score and text and set them on the interface*/
 	board = create_map("portada",sizeb);
 	score = create_map("score",sizes);
 	text = create_map("text",sizet);
@@ -88,8 +88,8 @@ void main(){
   fflush(stdout);
 
 	while(1){
-	quit=_read_key();
-
+	quit = _read_key();
+	/*pressing q it exits*/
 	if (quit == 'q') {
 		inter_delete(i);
     tcsetattr(fileno(stdin), TCSANOW, &initial);	/*We now restore the settings we back-up'd
@@ -97,6 +97,7 @@ void main(){
 							  the program ends */
     return;
   }
+	/*if you press the space bar,you move foward*/
 	if(quit == 32){
 		int k;
 		for(k = 0;k<sizeb[0];k++){
@@ -106,13 +107,23 @@ void main(){
 		break;
 	}
 	}
-
+/*we create the new map,and draw it in board*/
 	board = create_map("sala",sizeb);
 	set_board(i,board,sizeb[0],sizeb[1]);
 	draw_board(i,1);
 	draw_text(i,1);
+/*The player chooses the game mode*/
+	while(1){
+		win_write_line_at(t,4,4,"Press e for the easy mode or h for the hard mode");
+		mode = _read_key();
+		if(mode != 'e' && mode != 'h') continue;
+		break;
+}
+/*depending on the game mode,we call a different function*/
+if(mode == 'e') Blackjack(i);
+if(mode == 'h') Blackjack_hard(i);
 
-Blackjack(i);
+
 
 
 	while(1){
@@ -128,5 +139,19 @@ Blackjack(i);
 
 
 	tcsetattr(fileno(stdin), TCSANOW, &initial);
+	for(k = 0;k<sizeb[0];k++){
+		free(board[k]);
+	}
+	for(k = 0;k<sizet[0];k++){
+		free(text[k]);
+	}
+	for(k = 0;k<sizes[0];k++){
+		free(score[k]);
+	}
+
+	free(board);
+	free(text);
+	free(score);
+
 	return;
 }
