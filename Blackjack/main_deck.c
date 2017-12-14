@@ -16,9 +16,7 @@ if(!d) {
   return 0;
 }
 
-for(i=0;i<52;i++){
-  print_card(deck_get_card(d,i),stdout);
-}
+
 
 d= shuffle(d);
 if(!d) {
