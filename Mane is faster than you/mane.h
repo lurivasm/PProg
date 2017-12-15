@@ -7,47 +7,13 @@
 #include <malloc.h>
 #include <time.h>
 #include <unistd.h>
+#include "permutaciones.h"
 
 
 #include <termios.h>
 #include <pthread.h>
 
 #include "interface.h"
-int mane(char* file);
-void ck_count(int max);
+int mane(char* file, Interface* i);
+int play_mane();
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-																													

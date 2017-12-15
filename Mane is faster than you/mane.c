@@ -1,7 +1,8 @@
 #include "interface.h"
 #include "mane.h"
 #include <time.h>
-
+#include <termios.h>
+#include <pthread.h>
 struct termios initial;
 
 int flag=0;
@@ -44,7 +45,8 @@ void ck_count(int max){
 		}
 	}
 }
-
+static int Dr[5] = {-1, 1, 0, 0, 0};
+static int Dc[5] = {0, 0, 1, -1, 0};
 int move_mane(Interface *i,int direction){
 	if (i==NULL||direction>4||direction<0) return -3;
 	int r,c;
@@ -66,7 +68,7 @@ int move_mane(Interface *i,int direction){
 	win_write_char_at(i->board,i->player_row,i->player_column,i->player);
 	return r<<8 +c;
 }
-int mane(char* file; Interface* i){
+int mane(char* file, Interface* i){
 	if (file==NULL) return 1;
 	int sizeb[2],sizes[2],sizet[2];
 	int mover;
@@ -103,7 +105,7 @@ int mane(char* file; Interface* i){
 							  the program ends */
       		return 3;
     	}
-    mover=move_mane(maze,-mover);
+    mover=move_mane(i,-mover);
 		if (mover == '-2') {
 						tcsetattr(fileno(stdin), TCSANOW, &initial);	/*We now restore the settings we back-up'd
 								  so that the termial behaves normally when
@@ -130,14 +132,18 @@ int mane(char* file; Interface* i){
 int play_mane(){
 	Interface *i;
 	int done=0,fail=0,res;
+	void *v;
 	pthread_t pth;
 	char map;
 	i=inter_create(33,114,0,0,0,86,22,0);
 	if (i==NULL) return -1;
 	while (done<6 || fail<3){
-		pthread_create(&pth, NULL, ck_count, 20);
-		res = mane(map,i);
+		/*map=aleat_num(1,1);*/
+		v=20;
+		pthread_create(&pth, NULL, ck_count, v);
+		res = mane("1.txt",i);
 		if (res == 3){
+			inter_delete(i);
 			return 1;
 		}
 		if (res == 1){
@@ -147,4 +153,7 @@ int play_mane(){
 			fail++;
 		}
 	}
+	inter_delete(i);
+	if (done == 5) return 1;
+	if (fail == 2) return -1;
 }
