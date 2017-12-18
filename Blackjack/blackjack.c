@@ -1,6 +1,7 @@
 
 
 #include "blackjack.h"
+struct termios initial;
 
 int draw_card(sc_rectangle* b,int row ,int column ,char *value){
   if(!b) return 0;
@@ -15,6 +16,80 @@ int draw_card(sc_rectangle* b,int row ,int column ,char *value){
   win_write_line_at(b,row+2,column,"|__|");
   return 1;
 }
+
+void main_Blackjack(Interface *i){
+
+	FILE *f;
+	int quit;
+	int j=0;
+	char** board;
+	char** score;
+	char** text;
+	int sizeb[2],sizes[2],sizet[2],mode;
+
+
+ /*We create the maps for the board,score and text and set them on the interface*/
+	board = create_map("portada",sizeb);
+
+
+	set_board(i,board,sizeb[0],sizeb[1]);
+
+	draw_board(i,1);
+
+	draw_score(i,1);
+
+	draw_text(i,1);
+
+	_term_init();
+
+	sc_rectangle* t;
+ 	t = get_text(i);
+ 	if(!t) return;
+
+	win_write_line_at(t,4,4,"Press the space bar to continue");
+
+
+
+
+	while(1){
+	quit = _read_key();
+	/*pressing q it exits*/
+	if (quit == 'q') {
+		inter_delete(i);
+    tcsetattr(fileno(stdin), TCSANOW, &initial);	/*We now restore the settings we back-up'd
+							  so that the termial behaves normally when
+							  the program ends */
+    return;
+  }
+	/*if you press the space bar,you move foward*/
+	if(quit == 32){
+		int k;
+		for(k = 0;k<sizeb[0];k++){
+			free(board[k]);
+		}
+		free(board);
+		break;
+	}
+	}
+/*we create the new map,and draw it in board*/
+	board = create_map("sala",sizeb);
+	set_board(i,board,sizeb[0],sizeb[1]);
+	draw_board(i,1);
+	draw_text(i,1);
+/*The player chooses the game mode*/
+	while(1){
+		win_write_line_at(t,4,4,"Press e for the easy mode or h for the hard mode");
+		mode = _read_key();
+		if(mode != 'e' && mode != 'h') continue;
+		break;
+}
+/*depending on the game mode,we call a different function*/
+if(mode == 'e') Blackjack(i);
+if(mode == 'h') Blackjack_hard(i);
+
+return;
+}
+
 
 int Blackjack_hard(Interface *i) {
 

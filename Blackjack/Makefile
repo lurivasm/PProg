@@ -1,6 +1,6 @@
 MCC = gcc -ansi -pedantic -std=c99
 CFLAGS = -Wall -g
-EXE = main_titulo_Blackjack train
+EXE =  train
 
 
 

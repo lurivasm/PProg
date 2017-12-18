@@ -77,7 +77,7 @@ void inter_delete(Interface*i){
 
 int set_player(Interface* i,char player,int row,int column){
 	if (i==NULL) return 0;
-	if (row<=0||column<=0) return 0;
+	if (row<0||column<0) return 0;
 	i->player=player;
 	i->player_row=row;
 	i->player_column=column;
@@ -232,4 +232,15 @@ sc_rectangle* get_score(Interface *i){
 sc_rectangle* get_text(Interface *i){
 	if(!i) return NULL;
 	return i->text;
+}
+
+
+int* player_get_position( Interface *i){
+	if(!i) return NULL;
+	int *p;
+	p = (int*)malloc(sizeof(int)*2);
+	p[0] = i->player_row;
+	p[1] = i->player_column;
+	return p;
+
 }

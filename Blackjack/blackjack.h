@@ -9,5 +9,7 @@ int Blackjack(Interface *i);
 
 int Blackjack_hard(Interface *i);
 
+void main_Blackjack(Interface *i);
+
 
 #endif

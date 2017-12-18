@@ -85,4 +85,6 @@ sc_rectangle* get_score(Interface *i);
 
 sc_rectangle* get_text(Interface *i);
 
+int* player_get_position(Interface *i);
+
 #endif
