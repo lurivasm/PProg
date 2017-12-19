@@ -42,7 +42,7 @@ void main(){
   set_player(i,'D',16,20);
 	printf("\e[?25l");
 	fflush(stdout);
-	 _term_init();
+	 _term_init(&initial);
 
 	  set_board(i,board,sizeb[0],sizeb[1]);
 	  draw_board(i,1);
@@ -73,7 +73,7 @@ void main(){
 
 
 	set_board(i,board,sizeb[0],sizeb[1]);
-	set_player(i,'D',p[0],p[1]);
+	set_player(i,'J',p[0],p[1]);
 	draw_board(i,1);
 	draw_text(i,1);
 	draw_score(i,1);
@@ -99,7 +99,5 @@ void main(){
 	free(board);
 	free(text);
 	free(score);
-	tcsetattr(fileno(stdin), TCSANOW, &initial);	/*We now restore the settings we back-up'd
-							so that the termial behaves normally when
-							the program ends*/
+	tcsetattr(fileno(stdin), TCSANOW, &initial);
 }
