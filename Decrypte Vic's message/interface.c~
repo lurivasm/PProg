@@ -156,7 +156,6 @@ int _read_key() {
 char **create_map(char *file,int *size){
 	if (file==NULL) return 0;
 	FILE *f;
-	int r;
 	f=fopen(file,"r");
 	if (f==NULL){
 		printf("No existe el archivo\n");
@@ -167,7 +166,7 @@ char **create_map(char *file,int *size){
 	int cols = atoi(strchr(buf, ' ')+1);
 
 	char **map=(char**)malloc(sizeof(char*)*rows);
-	for(r=0;r<rows;r++){
+	for(int r=0;r<rows;r++){
 		map[r]=(char*)malloc(cols+1);
 		fgets(buf, 1000, f);
 		int k=0;

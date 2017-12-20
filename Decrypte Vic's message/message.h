@@ -5,12 +5,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "interface.h"
+
 #define ERR -1
 #define WIN 10
 #define LOOSE -10
 
 typedef struct _message Message;
 typedef struct _game Game;
+
+/*Last game*/
+int Vic(Interface *i);
 
 /*Initialization of a message*/
 Message *message_ini();

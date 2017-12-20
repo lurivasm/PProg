@@ -26,42 +26,63 @@
 #define HERE     4
 
 typedef struct {
-	int r1;		/*Fila inicial*/
-	int c1;		/*Columna inicial*/
-	int rows;    /*Numero de filas*/
-	int columns; /*Numero de columnas*/
-	sc_rectangle* board;    /*Rectangulos en los que dividimos la pantalla*/
-	int map_rows;
-	int map_columns;
-	char **map;
+	int rb;					/*initial row to write board*/
+	int cb;					/*initial column to write board*/
+	int rs;					/*initial row to write score*/
+	int cs;					/*initial column to write score*/
+	int rt;					/*initial row to write text*/
+	int ct;					/*initial column to write text*/
+	int rows;
+	int columns;
+	sc_rectangle* board;
+	sc_rectangle* score;
+	sc_rectangle* text;
+	int mapb_rows;
+	int mapb_columns;
+	int maps_rows;
+	int maps_columns;
+	int mapt_rows;
+	int mapt_columns;
+	char **mapb;        /*board map*/
+	char **maps;        /*score map*/
+	char **mapt;        /*text map*/
 	char player;
 	int player_row;
 	int player_column;
 }Interface;
 
-/*Crea una interfaz de juego con x filas e y columnas*/
-Interface * inter_create(int r1, int c1, int rows,int columns);
+void _term_init();
 
-/*Posiciona al jugador en una interfaz con el caracter player en la fila row y columna column*/
+
+/*i=inter_create(33,114,0,0,0,86,22,0);*/
+Interface * inter_create(int rows,int columns,int rb,int cb,int rs,int cs,int rt,int ct);
+
 int set_player(Interface* i,char player,int row,int column);
 
-/*Elimina la interfaz*/
 void inter_delete(Interface*i);
 
-/*Establece la columnas y filas del mapa principal*/
-int set_board(Interface* i, char **board, int row, int columns);
+int set_board(Interface* i,char **board,int row,int columns);
 
-/**/
-int draw_board(Interface *i, int clear);
+int set_score(Interface* i,char **score,int row,int columns);
 
-/*Se mueve en la dirección establecida*/
+int set_text(Interface* i,char **text,int row,int columns);
+
+int draw_board(Interface *i, int clear) ;
+
+int draw_score(Interface* i, int clear);
+
+int draw_text(Interface* i, int clear);
+
 int move (Interface *i,int direction);
 
-/*Lee del teclado el movimiento*/
 int _read_key();
 
-/*Crea el mapa del fichero pasado. Size es un array de dos elementos (fila,columna)*/
 char **create_map(char *file,int *size);
 
+sc_rectangle* get_board(Interface *i);
+
+sc_rectangle* get_score(Interface *i);
+
+sc_rectangle* get_text(Interface *i);
 
 #endif
