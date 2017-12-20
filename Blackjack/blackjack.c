@@ -1,7 +1,7 @@
 
 
 #include "blackjack.h"
-struct termios initial;
+
 
 int draw_card(sc_rectangle* b,int row ,int column ,char *value){
   if(!b) return 0;
@@ -19,13 +19,11 @@ int draw_card(sc_rectangle* b,int row ,int column ,char *value){
 
 void main_Blackjack(Interface *i){
 
-	FILE *f;
+
 	int quit;
-	int j=0;
 	char** board;
-	char** score;
-	char** text;
-	int sizeb[2],sizes[2],sizet[2],mode;
+
+	int sizeb[2],mode;
 
 
  /*We create the maps for the board,score and text and set them on the interface*/
@@ -40,7 +38,7 @@ void main_Blackjack(Interface *i){
 
 	draw_text(i,1);
 
-	_term_init();
+
 
 	sc_rectangle* t;
  	t = get_text(i);
@@ -54,13 +52,7 @@ void main_Blackjack(Interface *i){
 	while(1){
 	quit = _read_key();
 	/*pressing q it exits*/
-	if (quit == 'q') {
-		inter_delete(i);
-    tcsetattr(fileno(stdin), TCSANOW, &initial);	/*We now restore the settings we back-up'd
-							  so that the termial behaves normally when
-							  the program ends */
-    return;
-  }
+	if (quit == 'q')  return;
 	/*if you press the space bar,you move foward*/
 	if(quit == 32){
 		int k;
@@ -95,7 +87,7 @@ int Blackjack_hard(Interface *i) {
 
     Deck *d;
     char p[3],aux[512],c[3];
-    int croupier=0,asv,points=0,cc,card,smoke,round,ace,column,prob;   /*asv is used to choose the value of an ace. cc is used to count the cards*/
+    int croupier=0,points=0,cc,card,smoke,round,ace,column,prob;   /* cc is used to count the cards*/
     d = create_deck();
     if (!d) return 0;
     d = set_deck(d);
@@ -334,7 +326,7 @@ int Blackjack_hard(Interface *i) {
   int Blackjack(Interface *i){
     Deck *d;
     char p[3],aux[512],c[3];
-    int croupier=0,asv,points=0,cc,card,smoke,round,ace,column;   /*asv is used to choose the value of an ace. cc is used to count the cards*/
+    int croupier=0,points=0,cc,card,smoke,round,ace,column;   /* cc is used to count the cards*/
     d = create_deck();
     if (!d) return 0;
     d = set_deck(d);

@@ -22,6 +22,7 @@ int main(){
 
   printf("\e[?25l");
 	fflush(stdout);
+  _term_init();
 
 
 	set_board(i,board,sizeb[0],sizeb[1]);

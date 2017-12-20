@@ -26,7 +26,6 @@ void main_dani(Interface *i){
 
 	draw_text(i,1);
 
-	initial =_term_init();
 
 	sc_rectangle* t;
  	t = get_text(i);

@@ -1,6 +1,6 @@
 MCC = gcc -ansi -pedantic -std=c99
-CFLAGS = -Wall -g -std=c99 
-EXE =  train
+CFLAGS = -Wall -g -std=c99
+EXE = play
 
 
 

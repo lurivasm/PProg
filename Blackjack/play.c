@@ -19,16 +19,18 @@ struct termios initial;
 
 void main(){
   Interface* i;
-  FILE *f;
   int m;
 	int *p;
-  int j=0,k;
+  int j,game,flag = 1;
   char** board;
   char** score;
   char** text;
-  int sizeb[2],sizes[2],sizet[2],mode;
-	sc_rectangle *b;
-	b = get_board(i);
+  int sizeb[2],sizes[2],sizet[2];
+  int played[12];
+  for(j = 0;j < 12 ; j++) played[j] = 0;
+  srand(time(NULL));
+
+
 	p = (int*)malloc(sizeof(int)*2);
 
 
@@ -39,10 +41,10 @@ void main(){
 
   i=inter_create(33,114,0,0,0,86,22,0);
 
-  set_player(i,'D',16,20);
+  set_player(i,'J',12,35); /* 12 35 */
 	printf("\e[?25l");
 	fflush(stdout);
-	 _term_init(&initial);
+	 _term_init();
 
 	  set_board(i,board,sizeb[0],sizeb[1]);
 	  draw_board(i,1);
@@ -62,10 +64,24 @@ void main(){
 
 	  move(i,-m);
 		p = player_get_position(i);
-		if(p[1] == 83 && (p[0] == 16 || p[0] == 17 || p[0] == 18 || p[0] == 19)){
+		if(p[1] == 83 && (p[0] == 3 || p[0] == 4 || p[0] == 5 )){
 			set_player(i,' ',0,0);
 			draw_board(i,1);
-			main_Blackjack(i);
+      game = rand()%2;
+      while(flag){
+        if(played[game] == 1){
+          game = rand()%2;
+        }
+        flag = 0;
+      }
+      switch (game) {
+        case(0):
+          main_Blackjack(i);
+          break;
+        case(1):
+          break;
+      }
+      played[game] = 1;
 			break;
 		}
 	}
@@ -86,18 +102,20 @@ void main(){
 	}
 
 
-  for(k = 0;k<sizeb[0];k++){
-		free(board[k]);
+  for(j = 0;j<sizeb[0];j++){
+		free(board[j]);
 	}
-	for(k = 0;k<sizet[0];k++){
-		free(text[k]);
+	for(j = 0;j<sizet[0];j++){
+		free(text[j]);
 	}
-	for(k = 0;k<sizes[0];k++){
-		free(score[k]);
+	for(j = 0;j<sizes[0];j++){
+		free(score[j]);
 	}
 
 	free(board);
 	free(text);
 	free(score);
-	tcsetattr(fileno(stdin), TCSANOW, &initial);
+	tcsetattr(fileno(stdin), TCSANOW, &initial);	/*We now restore the settings we back-up'd
+							so that the termial behaves normally when
+							the program ends*/
 }
