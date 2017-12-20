@@ -33,19 +33,19 @@ void _term_init() {
 						    terminal. TCSANOW tells the program not to wait
 						    before making this change*/
 }
-void ck_count(int max){
+void ck_count(void* max){
 	time_t itime;
 	itime=time(NULL);
 	while(1){
 		time_t instant;
 		instant=time(NULL);
-		if (instant-itime>max){
+		if (instant-itime>*(int*)(max)){
 			flag=1;
 			return;
 		}
 	}
 }
-static int Dr[5] = {-1, 1, 0, 0, 0};
+/*static int Dr[5] = {-1, 1, 0, 0, 0};
 static int Dc[5] = {0, 0, 1, -1, 0};
 int move_mane(Interface *i,int direction){
 	if (i==NULL||direction>4||direction<0) return -3;
@@ -67,11 +67,12 @@ int move_mane(Interface *i,int direction){
 	i->player_row=r;
 	win_write_char_at(i->board,i->player_row,i->player_column,i->player);
 	return r<<8 +c;
-}
+}*/
 int mane(char* file, Interface* i){
 	if (file==NULL) return 1;
 	int sizeb[2],sizes[2],sizet[2];
 	int mover;
+	int *place;
 	char** board;
 	char** score;
 	char** text;
@@ -99,13 +100,17 @@ int mane(char* file, Interface* i){
 		mover=_read_key();
 		fflush(stdout);
 
-		if (mover == '1') {
+		if (mover == 'q') {
       		tcsetattr(fileno(stdin), TCSANOW, &initial);	/*We now restore the settings we back-up'd
 							  so that the termial behaves normally when
 							  the program ends */
       		return 3;
     	}
-    mover=move_mane(i,-mover);
+    	place=player_get_position(i);
+
+    	if (i->mapb[place[0]][])
+
+   		mover=move(i,-mover);
 		if (mover == '-2') {
 						tcsetattr(fileno(stdin), TCSANOW, &initial);	/*We now restore the settings we back-up'd
 								  so that the termial behaves normally when
@@ -132,15 +137,15 @@ int mane(char* file, Interface* i){
 int play_mane(){
 	Interface *i;
 	int done=0,fail=0,res;
-	void *v;
+	int v[1];
 	pthread_t pth;
 	char map;
 	i=inter_create(33,114,0,0,0,86,22,0);
 	if (i==NULL) return -1;
 	while (done<6 || fail<3){
 		/*map=aleat_num(1,1);*/
-		v=20;
-		pthread_create(&pth, NULL, ck_count, v);
+		v[0]=20;
+		pthread_create(&pth, NULL, ck_count, (void*)v);
 		res = mane("1.txt",i);
 		if (res == 3){
 			inter_delete(i);
