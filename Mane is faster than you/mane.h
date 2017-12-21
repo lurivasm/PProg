@@ -14,6 +14,6 @@
 #include <pthread.h>
 
 #include "interface.h"
-int mane(char* file, Interface* i);
+int mane(char** board, Interface* i);
 int play_mane();
 #endif

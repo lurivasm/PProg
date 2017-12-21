@@ -5,10 +5,10 @@
 #include <pthread.h>
 struct termios initial;
 
-int flag=0;
+int flag = 0;
 
 void _term_init() {
-	struct termios new;	          /*a termios structure contains a set of attributes about
+	struct termios new;/*a termios structure contains a set of attributes about
 					  how the terminal scans and outputs data*/
 
 	tcgetattr(fileno(stdin), &initial);    /*first we get the current settings of out
@@ -45,35 +45,16 @@ void ck_count(void* max){
 		}
 	}
 }
-/*static int Dr[5] = {-1, 1, 0, 0, 0};
+
+static int Dr[5] = {-1, 1, 0, 0, 0};
 static int Dc[5] = {0, 0, 1, -1, 0};
-int move_mane(Interface *i,int direction){
-	if (i==NULL||direction>4||direction<0) return -3;
-	int r,c;
-	r=i->player_row+Dr[direction];
-	c=i->player_column+Dc[direction];
-	if(r<0||c<0||r>=i->rows||c>=i->columns) return -2;
-	if (i->mapb[r][c]!=' ') {
-		return -1;
-	}
-  if (i->mapb[r][c] == '*'){
-		return -2;
-	}
-	if (i->mapb[r][c] == 'M'){
-		return 1;
-	}
-	win_write_char_at(i->board,i->player_row,i->player_column,' ');
-	i->player_column=c;
-	i->player_row=r;
-	win_write_char_at(i->board,i->player_row,i->player_column,i->player);
-	return r<<8 +c;
-}*/
-int mane(char* file, Interface* i){
-	if (file==NULL) return 1;
-	int sizeb[2],sizes[2],sizet[2];
+int mane(char** board, Interface* i){
+	/*if (file==NULL) return 1;
+	int sizeb[2],sizes[2],sizet[2];*/
 	int mover;
+	int nextcol,nextrow;
 	int *place;
-	char** board;
+	/*char** board;
 	char** score;
 	char** text;
 	board = create_map(file,sizeb);
@@ -88,15 +69,12 @@ int mane(char* file, Interface* i){
 	set_text(i,text,sizet[0],sizet[1]);
 	draw_text(i,1);
 
-	set_player(i,'J',23,44);
-
-	free(board);
-	free(score);
-	free(text);
+	set_player(i,'J',22,45);*/
 
 	_term_init();
-	flag=0;
+	flag = 0;
 	while (flag == 0){
+		draw_board(i,1);
 		mover=_read_key();
 		fflush(stdout);
 
@@ -104,34 +82,45 @@ int mane(char* file, Interface* i){
       		tcsetattr(fileno(stdin), TCSANOW, &initial);	/*We now restore the settings we back-up'd
 							  so that the termial behaves normally when
 							  the program ends */
+      		
+
       		return 3;
     	}
     	place=player_get_position(i);
+    	nextrow=place[0]+Dr[-mover];
+    	nextcol=place[1]+Dc[-mover];
+    	free (place);
 
-    	if (i->mapb[place[0]][])
 
-   		mover=move(i,-mover);
-		if (mover == '-2') {
-						tcsetattr(fileno(stdin), TCSANOW, &initial);	/*We now restore the settings we back-up'd
+    	if (board[nextrow][nextcol] == '*'){
+    			tcsetattr(fileno(stdin), TCSANOW, &initial);	/*We now restore the settings we back-up'd
 								  so that the termial behaves normally when
 								  the program ends */
+	      		
 	      		return 0;
-	    }
-		if (mover == '1') {
-							tcsetattr(fileno(stdin), TCSANOW, &initial);	/*We now restore the settings we back-up'd
+
+    	}
+    	if (board[nextrow][nextcol] == 'M'){
+    				tcsetattr(fileno(stdin), TCSANOW, &initial);	/*We now restore the settings we back-up'd
 									  so that the termial behaves normally when
 									  the program ends */
-		      		return 1;
-		    }
+		      		
 
+		      		return 1;
+
+    	}
+
+   		mover=move(i,-mover);
 		fflush(stdout);
 	}
-
+	/*free(score);
+	free(text);
+	free(board);*/
 
 	tcsetattr(fileno(stdin), TCSANOW, &initial);	/*We now restore the settings we back-up'd
 							  so that the termial behaves normally when
 							  the program ends */
-      		return 0;
+	return 0;
 }
 
 int play_mane(){
@@ -141,12 +130,39 @@ int play_mane(){
 	pthread_t pth;
 	char map;
 	i=inter_create(33,114,0,0,0,86,22,0);
-	if (i==NULL) return -1;
+	if (i == NULL) return -1;
 	while (done<6 || fail<3){
 		/*map=aleat_num(1,1);*/
-		v[0]=20;
+		/*while(1){
+			int quit = _read_key();
+			if (quit == 'q')  return;
+			if(quit == 32){
+				break;
+			}
+		}*/
+		int sizeb[2],sizes[2],sizet[2];
+		int mover;
+		int nextcol,nextrow;
+		int *place;
+		char** board;
+		char** score;
+		char** text;
+		board = create_map("1.txt",sizeb);
+		score = create_map("score",sizes);
+		text = create_map("text",sizet);
+		set_board(i,board,sizeb[0],sizeb[1]);
+		draw_board(i,1);
+
+		set_score(i,score,sizes[0],sizes[1]);
+		draw_score(i,1);
+
+		set_text(i,text,sizet[0],sizet[1]);
+		draw_text(i,1);
+
+		set_player(i,'J',22,45);
+		v[0]=10;
 		pthread_create(&pth, NULL, ck_count, (void*)v);
-		res = mane("1.txt",i);
+		res = mane(board,i);
 		if (res == 3){
 			inter_delete(i);
 			return 1;
@@ -157,6 +173,10 @@ int play_mane(){
 		else if (res == 0){
 			fail++;
 		}
+		free(score);
+		free(text);
+      	free(board);
+		
 	}
 	inter_delete(i);
 	if (done == 5) return 1;
