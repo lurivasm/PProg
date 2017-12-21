@@ -4,8 +4,16 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
+#include <malloc.h>
 #include <time.h>
+#include <unistd.h>
+
+
+#include <termios.h>
+#include <pthread.h>
+#include "interface.h"
 
 #define ERR -1
 #define WIN 10
@@ -18,6 +26,9 @@ int number_compare(int number, int answer);
 int number_rand(int min, int max);
 
 /*The minigame: returns ERR, WIN or LOOSE*/
-int number_game(void);
+int Juan(Interface *i);
+
+/*The final game with interface*/
+void number_main(void);
 
 #endif
