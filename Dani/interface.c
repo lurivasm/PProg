@@ -4,11 +4,11 @@
 
 
 
+struct termios initial;
 
 
 
-
-_term_init() {
+void _term_init() {
 	struct termios new;	          /*a termios structure contains a set of attributes about
 					  how the terminal scans and outputs data*/
 
@@ -34,7 +34,7 @@ _term_init() {
 						    terminal. TCSANOW tells the program not to wait
 						    before making this change*/
 
-	
+
 }
 
 /*inter_create(33,114,0,0,0,86,22,0)*/

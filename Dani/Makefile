@@ -1,12 +1,18 @@
-MCC = gcc -ansi -pedantic -std=c99
-CFLAGS = -Wall -g -std=c99 
-EXE =  prueba
+interface.o:	interface.c rectangles.c
+	gcc -std=c99 -c -g interface.c
 
 
+laser.o: laser.c dani.c interface.c rectangles.c
+		gcc -std=c99 -c -g laser.c
 
-all : $(EXE)
+rectangles.o:	rectangles.c
+	gcc -std=c99 -c -g rectangles.c
 
-clean :
-	rm -f *.o core $(EXE)
+dani.o:	dani.c interface.c rectangles.c
+	gcc -std=c99 -c -g dani.c
 
-$(EXE) : % : %.o dani.o interface.o rectangles.o
+all:	interface.o rectangles.o dani.o laser.o
+	gcc -pthread -o  laser interface.o laser.o rectangles.o dani.o
+
+clean:
+	rm *.o

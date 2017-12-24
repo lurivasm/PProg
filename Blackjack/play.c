@@ -67,7 +67,7 @@ void main(){
 		if(p[1] == 83 && (p[0] == 3 || p[0] == 4 || p[0] == 5 )){
 			set_player(i,' ',0,0);
 			draw_board(i,1);
-      game = rand()%2;
+      game = rand()%1;
       while(flag){
         if(played[game] == 1){
           game = rand()%2;
