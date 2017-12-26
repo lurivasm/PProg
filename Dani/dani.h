@@ -6,6 +6,6 @@
 
 void main_dani(Interface *i);
 
-void dani(Interface *i);
+int dani(Interface *i);
 
 #endif
