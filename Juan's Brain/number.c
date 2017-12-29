@@ -34,44 +34,26 @@ void _term_init() {
 						    before making this change*/
 }
 
-void number_main(void){
-	Interface* i;
-	FILE *f;
-	int quit, game, key;
-	int j=0,k;
+void main_juan(Interface *i){
+	int quit, game;
+	int k;
 	char** board;
-	char** score;
-	char** text;
-	int sizeb[2],sizes[2],sizet[2],mode;
+	int sizeb[2];
 
 
  /*We create the maps for the board,score and text and set them on the interface*/
 	board = create_map("juan.txt",sizeb);
-	score = create_map("score",sizes);
-	text = create_map("text",sizet);
-
-	i = inter_create(33,114,0,0,0,86,22,0);
 
 	set_board(i, board, sizeb[0], sizeb[1]);
 	draw_board(i, 1);
 
-	set_score(i, score, sizes[0], sizes[1]);
-	draw_score(i,1);
-
-	set_text(i, text, sizet[0], sizet[1]);
-	draw_text(i,1);
-
 	_term_init();
-
 
 	sc_rectangle* t;
  	t = get_text(i);
  	if(!t) return;
 
-
 	win_write_line_at(t,4,4,"Press the space bar to continue");
-
-
 
 	printf("\e[?25l");
   fflush(stdout);
@@ -96,7 +78,8 @@ void number_main(void){
 			break;
 		}
 	}
-/*we create the new map,and draw it in board*/
+
+/*We create the new map,and draw it in board*/
 	play: board = create_map("juan_board.txt",sizeb);
 	set_board(i, board, sizeb[0], sizeb[1]);
 	draw_board(i, 1);
@@ -117,49 +100,37 @@ void number_main(void){
 		win_write_line_at(t,4,4,"Do you want to play again? [y/n]");
 
 		while(1){
-			key = _read_key();
-			if(key != 'y' && key != 'n') continue;
-			if(key == 'y') goto play;
+			quit = _read_key();
+			if(quit != 'y' && quit != 'n') continue;
+			if(quit == 'y') goto play;
 			else {break;}
 
 		}
 	}
 
-	for(k = 0; k < sizeb[0]; k++){
-		free(board[k]);
+	if (game == WIN){
+		for(k = 0; k < sizeb[0]; k++){
+			free(board[k]);
+		}
+		free(board);
+
+		board = create_map("winner.txt",sizeb);
+		set_board(i, board, sizeb[0], sizeb[1]);
+		draw_board(i, 1);
+		win_write_line_at(t,4,4,"Thanks for playing!");
 	}
-	free(board);
-
-	board = create_map("winner.txt",sizeb);
-	set_board(i, board, sizeb[0], sizeb[1]);
-	draw_board(i, 1);
-	win_write_line_at(t,4,4,"Thanks for playing!");
-
 
 	tcsetattr(fileno(stdin), TCSANOW, &initial);
 	for(k = 0; k < sizeb[0]; k++){
 		free(board[k]);
 	}
-	for(k = 0;k < sizet[0]; k++){
-		free(text[k]);
-	}
-	for(k = 0; k < sizes[0]; k++){
-		free(score[k]);
-	}
 
 	free(board);
-	free(text);
-	free(score);
 
 	return;
 }
 
 
-
-int number_compare(int number, int answer){
-  if (number <= 0 || answer <= 0) return ERR;
-  return (number == answer) ? 0 : 1;
-}
 
 
 int number_rand(int min, int max){
@@ -168,8 +139,8 @@ int number_rand(int min, int max){
 
 
 int Juan(Interface *in){
-  int i, number[5], answer, errs = 0, comp;
-  char numchar[5];
+  int i, j, number, errs = 0, col, fila, answer, key;
+  char numchar[8], errchar[8];
   sc_rectangle *t, *s, *b;
 
   t = get_text(in);
@@ -178,38 +149,84 @@ int Juan(Interface *in){
 
   srand(time(NULL));
   win_write_line_at(s, 4, 4,"         RULES");
-  win_write_line_at(s, 6, 4," Respect capital letters");
-  win_write_line_at(s, 8, 4,"There are strange things");
-  win_write_line_at(s, 10, 4,"Respect puntuation marks");
-  win_write_line_at(s, 12, 4,"   3 fails = lost game");
-  win_write_line_at(s, 14, 4,"      And finally...");
-  win_write_line_at(s, 15, 4," ENJOY TALKING WITH VIC");
-  win_write_line_at(s, 20, 4,"Failed sentences: ");
+  win_write_line_at(s, 6, 4,"   Remember the number");
+  win_write_line_at(s, 8, 4,"  There are 10 numbers");
+	win_write_line_at(s, 10, 4,"   5 fails = lost game");
+  win_write_line_at(s, 12, 4," Juan may cough too much");
+	win_write_line_at(s, 14, 4,"      And finally...");
+  win_write_line_at(s, 15, 4," TRY TO WIN JUAN'S BRAIN");
+  win_write_line_at(s, 20, 4,"Fails : ");
 
-  usleep(200000);
+	sprintf(errchar, "%d", errs);
+	win_write_line_at(s, 20, 12,errchar);
 
-  win_write_line_at(t, 4, 4, "Your answer :");
+	usleep(200000);
 
-  for(i = 0; i < 6; i++){
-    number[i] = number_rand(0, 1000);
-    if(number[i] == -1) return ERR;
-    sprintf(numchar, "%d", number[i]);
+  for(i = 0; i < 10; i++){
+		draw_board(i, 1);
+		draw_text(i, 1);
+    number = number_rand(1000, 100000);
+    if(number == -1) return ERR;
 
-    win_write_line_at(s, 4, 4,numchar;
+		if(number > 50000){
+			for(j = 0; j < 100; j++){
+				col = number_rand(4, 80);
+				fila = number_rand(1, 22);
+				win_write_line_at(b, fila, col, "COUGH");
+				}
+
+			win_write_line_at(t, 3, 4, "Juan is coughing too much, you can't concentrate");
+			win_write_line_at(t, 4, 4, "You will have to give him something");
+			win_write_line_at(t, 5, 4, "Do you want to give Juan a sweet? [y/n]");
+			while(1){
+				key = _read_key();
+				if(key == 'y'){
+					win_write_line_at(t, 6, 4, "Juan is getting better...");
+					win_write_line_at(t, 7, 4, "You have to answer first without looking:");
+					_move_to(t, 7, 43);
+					goto here;
+				}
+				else if(key == 'n'){
+					win_write_line_at(t, 6, 4, "You are a bad friend, you are nothing");
+					win_write_line_at(t, 7, 4, "You have two points less in this exam");
+					errs += 2;
+					sprintf(errchar, "%d", errs);
+					win_write_line_at(s, 20, 12,errchar);
+					goto compare;
+				}
+				else{ continue; }
+		}
+	}
+
+
+		win_write_line_at(t, 4, 4, "Your answer :");
+		col = number_rand(40, 80);
+		fila = number_rand(11, 22);
+    sprintf(numchar, "%d", number);
+
+    win_write_line_at(b, fila, col, numchar);
+		usleep(200000);
+		win_write_line_at(b, fila, col, "      ");
 
     _move_to(t, 4, 18);
-    tcsetattr(fileno(stdin), TCSANOW, &initial);
-    fgets(answer, 100, stdin);
+    here: tcsetattr(fileno(stdin), TCSANOW, &initial);
 
     scanf("%d", &answer);
 
     _term_init();
-    
-    comp = number_compare(number[i], answer);
 
-    if(comp == ERR) return ERR;
-    if(comp == 1) errs ++;
-    if(errs > 2) return LOOSE;
+    if(answer != number){
+			errs++;
+			sprintf(errchar, "%d", errs);
+			win_write_line_at(s, 20, 12,errchar);
+		}
+
+		compare : if(5 <= errs){
+			win_write_line_at(b, 5, 24, "    YOU HAVE   ");
+			win_write_line_at(b, 6, 24, "     FAILED    ");
+			win_write_line_at(b, 7, 24, "  MUAJAJAJAJA  ");
+			return LOOSE;
+		}
   }
 
   return WIN;
