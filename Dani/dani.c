@@ -51,7 +51,7 @@ void main_dani(Interface *i){
 
 
  /*We create the maps for the board,score and text and set them on the interface*/
-	board = create_map("portada",sizeb);
+	board = create_map("tiraficher",sizeb);
 
 
 	set_board(i,board,sizeb[0],sizeb[1]);
@@ -196,7 +196,7 @@ void main_dani(Interface *i){
         draw_text(i,1);
         continue;
       }
-      
+
     }
 
    return;
