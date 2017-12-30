@@ -1,5 +1,5 @@
-#ifndef MANE_H
-#define MANE_H
+#ifndef LUIS_H
+#define LUIS_H
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -7,13 +7,11 @@
 #include <malloc.h>
 #include <time.h>
 #include <unistd.h>
-#include "permutaciones.h"
 
 
 #include <termios.h>
 #include <pthread.h>
 
 #include "interface.h"
-int mane(char** board, Interface* i);
-int play_mane(Interface *i);
+int play_luis (Interface *i);
 #endif
