@@ -50,29 +50,12 @@ void ck_count(void* max){
 static int Dr[5] = {-1, 1, 0, 0, 0};
 static int Dc[5] = {0, 0, 1, -1, 0};
 int mane(char** board, Interface* i){
-	/*if (file==NULL) return 1;
-	int sizeb[2],sizes[2],sizet[2];*/
+
 	int mover;
 	int nextcol,nextrow;
 	int *place;
-	/*char** board;
-	char** score;
-	char** text;
-	board = create_map(file,sizeb);
-	score = create_map("score",sizes);
-	text = create_map("text",sizet);
-	set_board(i,board,sizeb[0],sizeb[1]);
-	draw_board(i,1);
 
-	set_score(i,score,sizes[0],sizes[1]);
-	draw_score(i,1);
 
-	set_text(i,text,sizet[0],sizet[1]);
-	draw_text(i,1);
-
-	set_player(i,'J',22,45);*/
-
-	_term_init();
 	flag = 0;
 	while (flag == 0){
 		draw_board(i,1);
@@ -80,11 +63,6 @@ int mane(char** board, Interface* i){
 		fflush(stdout);
 
 		if (mover == 'q') {
-      		tcsetattr(fileno(stdin), TCSANOW, &initial);	/*We now restore the settings we back-up'd
-							  so that the termial behaves normally when
-							  the program ends */
-      		
-
       		return 3;
     	}
     	place=player_get_position(i);
@@ -94,12 +72,11 @@ int mane(char** board, Interface* i){
     	if (nextrow > 21 || nextcol >86) continue;
 
     	if (board[nextrow][nextcol] == '*'){
-    			tcsetattr(fileno(stdin), TCSANOW, &initial);		      		
-	      		return 0;
+     		return 0;
 
     	}
     	if (board[nextrow][nextcol] == 'M'){
-    				tcsetattr(fileno(stdin), TCSANOW, &initial);     		
+
 
 		      		return 1;
 
@@ -108,19 +85,13 @@ int mane(char** board, Interface* i){
    		move(i,-mover);
 		fflush(stdout);
 	}
-	/*free(score);
-	free(text);
-	free(board);*/
 
-	tcsetattr(fileno(stdin), TCSANOW, &initial);	/*We now restore the settings we back-up'd
-							  so that the termial behaves normally when
-							  the program ends */
+
 	return 0;
 }
 
-int play_mane(){
-	Interface *i;
-	int done=0,fail=0,res;
+int play_mane(Interface *i){
+	int done = 0,fail = 0,res,quit;
 	int v[1];
 	pthread_t pth;
 	char map;
@@ -131,16 +102,16 @@ int play_mane(){
 	char** board;
 	char** score;
 	char** text;
-	sc_rectangle* t;
+	sc_rectangle* t, *s;
 	char p[280];
 
-	i=inter_create(33,114,0,0,0,86,22,0);
 	printf("\e[?25l");
 	fflush(stdout);
 	if (i == NULL) return -1;
 
 	score = create_map("score",sizes);
 	text = create_map("text",sizet);
+	board = create_map("beginin.txt",sizeb);
 
 
 	set_score(i,score,sizes[0],sizes[1]);
@@ -149,49 +120,103 @@ int play_mane(){
 	set_text(i,text,sizet[0],sizet[1]);
 	draw_text(i,1);
 
+	set_board(i,board,sizeb[0],sizeb[1]);
+	draw_board(i,1);
+
 	t = get_text(i);
+
+	s = get_score(i);
+
+	_term_init();
+
+	win_write_line_at(t,4,4,"Press the space bar to continue");
+
+	win_write_line_at (s,3,6,"The rules are simple:");
+
+	win_write_line_at(s,5,6,"You have to reach the");
+
+	win_write_line_at(s,6,6,"M before the time");
+
+	win_write_line_at(s,7,6,"expires, but you");
+
+	win_write_line_at(s,8,6,"won't know it");
+
+	win_write_line_at(s,9,6,"Good luck!");
+
+	while(1){
+	quit = _read_key();
+	/*pressing q it exits*/
+	if (quit == 'q')  return;
+	/*if you press the space bar,you move foward*/
+	if(quit == 32){
+		int k;
+		for(k = 0;k<sizeb[0];k++){
+			free(board[k]);
+		}
+		free(board);
+		break;
+	}
+	}
+
+
+	draw_text(i,1);
+	draw_score(i,1);
+
+	win_write_line_at(s,4,6,"Score:");
+
+	win_write_line_at(s,6,6,"Win: 0");
+
+	win_write_line_at(s,8,6,"Fail: 0");
 
 	while (done<5 && fail<3){
 		/*map=aleat_num(1,1);*/
-		/*while(1){
-			int quit = _read_key();
-			if (quit == 'q')  return;
-			if(quit == 32){
-				break;
-			}
-		}*/
-		
+
+		draw_text(i,1);
+
 		board = create_map("1.txt",sizeb);
-		
+
 		set_board(i,board,sizeb[0],sizeb[1]);
 		set_player(i,'J',21,45);
 		draw_board(i,1);
 
-		
+
 		v[0]=100;
 		pthread_create(&pth, NULL, ck_count, (void*)v);
 		res = mane(board,i);
 		if (res == 3){
-			inter_delete(i);
 			pthread_cancel(pth);
+			tcsetattr(fileno(stdin), TCSANOW, &initial);
 			return 1;
 		}
 		if (res == 1){
 			pthread_cancel(pth);
 			done++;
-			sprintf(p,"%d %d",done,fail);
-			win_write_line_at(t,4,4,p);
-			continue;
+			sprintf(p,"%d",done);
+			win_write_line_at(s,6,12,p);
 		}
 		else if (res == 0){
 			pthread_cancel(pth);
 			fail++;
-			sprintf(p,"%d %d",done,fail);
-			win_write_line_at(t,4,4,p);
-			continue;
+			sprintf(p,"%d",fail);
+			win_write_line_at(s,8,12,p);
 		}
-		
-		
+		win_write_line_at(t,4,4,"Press the space bar to begin the round");
+
+		while(1){
+		quit = _read_key();
+		/*pressing q it exits*/
+		if (quit == 'q')  return;
+		/*if you press the space bar,you move foward*/
+		if(quit == 32){
+			int k;
+			for(k = 0;k<sizeb[0];k++){
+				free(board[k]);
+			}
+			free(board);
+			break;
+			}
+		}
+
 	}
 
 	int j;
@@ -204,11 +229,11 @@ int play_mane(){
 	for(j = 0;j<sizes[0];j++){
 		free(score[j]);
 	}
+	tcsetattr(fileno(stdin), TCSANOW, &initial);
 
 	free(board);
 	free(text);
 	free(score);
-	inter_delete(i);
 	if (done == 5) return 1;
 	if (fail == 3) return -1;
 	return -2;
