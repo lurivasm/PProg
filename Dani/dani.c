@@ -76,18 +76,9 @@ void main_dani(Interface *i){
 	while(1){
 	quit = _read_key();
 	/*pressing q it exits*/
-	if (quit == 'q') {
-		inter_delete(i);
-    tcsetattr(fileno(stdin), TCSANOW, &initial);	/*We now restore the settings we back-up'd
-							  so that the termial behaves normally when
-							  the program ends */
-    return;
-  }
+	if (quit == 'q')   return;
 	/*if you press the space bar,you move foward*/
-	if(quit == 32){
-		free(board);
-		break;
-	}
+	if(quit == 32) break;
 	}
 
   draw_text(i,1);

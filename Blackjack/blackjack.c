@@ -54,14 +54,7 @@ void main_Blackjack(Interface *i){
 	/*pressing q it exits*/
 	if (quit == 'q')  return;
 	/*if you press the space bar,you move foward*/
-	if(quit == 32){
-		int k;
-		for(k = 0;k<sizeb[0];k++){
-			free(board[k]);
-		}
-		free(board);
-		break;
-	}
+	if(quit == 32) break;
 	}
 /*we create the new map,and draw it in board*/
 	board = create_map("sala",sizeb);
