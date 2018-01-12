@@ -20,6 +20,7 @@ struct termios initial;
 
 void main(){
   Interface* i;
+  World *w;
   int m;
 	int *p;
   int j,game,flag = 1;
@@ -40,7 +41,9 @@ void main(){
   score = create_map("score",sizes);
   text = create_map("text",sizet);
 
-  i=inter_create(33,114,0,0,0,86,22,0);
+  /*i=inter_create(33,114,0,0,0,86,22,0);*/
+  w = create_world();
+  i = get_interface();
 
   set_player(i,'J',12,35); /* 12 35 */
 	printf("\e[?25l");
@@ -72,6 +75,7 @@ void main(){
       while(flag){
         if(played[game] == 1){
           game = rand()%2;
+          continue;
         }
         flag = 0;
       }

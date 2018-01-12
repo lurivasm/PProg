@@ -53,7 +53,7 @@ void main_lucia(Interface *i){
   sprintf(points,"Lucia's points %d",lucia);
   win_write_line_at(s,5,4,points);
 
-  /*win_write_line_at(t,4,4,"A: So,let's begin with the 2017 alcoholympics final!");
+  win_write_line_at(t,4,4,"A: So,let's begin with the 2017 alcoholympics final!");
   usleep(4000000);
   win_write_line_at(t,5,4,"A: Our two finalists are Javiti and Lucia");
   usleep(3000000);
@@ -62,7 +62,7 @@ void main_lucia(Interface *i){
   draw_text(i,1);
   win_write_line_at(t,4,4,"L: Aim goin tu wuin,aim an expert in drinkin");
   usleep(2000000);
-  win_write_line_at(s,7,4,"Get to the beer table");*/
+  win_write_line_at(s,7,4,"Get to the beer table");
 
 while(1){
   quit = _read_key();
@@ -89,11 +89,11 @@ set_board(i,board,sizeb[0],sizeb[1]);
 set_player(i,'J',7,16);
 draw_board(i,1);
 
-/*win_write_line_at(t,4,4,"A: That was great.Now ,let's head to the second task ");
+win_write_line_at(t,4,4,"A: That was great.Now ,let's head to the second task ");
 usleep(4000000);
 win_write_line_at(t,5,4,"A: Please go to the card table");
 usleep(2000000);
-win_write_line_at(s,7,4,"Get to the card table");*/
+win_write_line_at(s,7,4,"Get to the card table");
 
 
 while(1){
@@ -454,7 +454,7 @@ int cards(Interface *i){
   s = get_score(i);
   b = get_board(i);
 
-  /*win_write_line_at(t,4,4,"A:So,in this card game,each turn you'll be given a first card");
+  win_write_line_at(t,4,4,"A:So,in this card game,each turn you'll be given a first card");
   usleep(5000000);
   win_write_line_at(t,5,4,"A:This card will have a value from 1 to 10");
   usleep(5000000);
@@ -473,7 +473,7 @@ int cards(Interface *i){
   win_write_line_at(t,5,4,"A:If it's not,you loose one point(unless you have 0)");
   usleep(5000000);
   win_write_line_at(t,6,4,"A:The first one who gets to 5 points win");
-  usleep(4000000);*/
+  usleep(4000000);
   win_write_line_at(t,7,4,"A:So,Javiti,you start!");
 
   sprintf(points,"Javiti: %d",jav);

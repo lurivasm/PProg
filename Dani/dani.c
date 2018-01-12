@@ -231,7 +231,7 @@ int dani(Interface *i){
       if(cont >= 50 && cont< 100) tim = 70000 ;
       if(cont >= 100 && cont < 150 ) tim = 60000 ;
       if(cont >= 150) tim = 40000;
-      if (cont == 200) break;
+      if (cont > 200) break;
       m = _read_key();
 			if(m == 'q') break;
 			if(m == -NORTH || m == -SOUTH) continue;
