@@ -53,14 +53,14 @@ void main_lucia(Interface *i){
   sprintf(points,"Lucia's points %d",lucia);
   win_write_line_at(s,5,4,points);
 
-  win_write_line_at(t,4,4,"A: So,let's begin with the 2017 alcoholympics final!");
+  win_write_line_at(t,4,4,"A: So, let's begin with the 2017 alcoholympics final!");
   usleep(4000000);
   win_write_line_at(t,5,4,"A: Our two finalists are Javiti and Lucia");
   usleep(3000000);
   win_write_line_at(t,6,4,"A: So please both of you go to the beer table to start with the first task");
   usleep(4000000);
   draw_text(i,1);
-  win_write_line_at(t,4,4,"L: Aim goin tu wuin,aim an expert in drinkin");
+  win_write_line_at(t,4,4,"L: Aim goin tu wuin, aim an expert in drinkin");
   usleep(2000000);
   win_write_line_at(s,7,4,"Get to the beer table");
 
@@ -89,7 +89,7 @@ set_board(i,board,sizeb[0],sizeb[1]);
 set_player(i,'J',7,16);
 draw_board(i,1);
 
-win_write_line_at(t,4,4,"A: That was great.Now ,let's head to the second task ");
+win_write_line_at(t,4,4,"A: That was great.Now, let's head to the second task ");
 usleep(4000000);
 win_write_line_at(t,5,4,"A: Please go to the card table");
 usleep(2000000);
@@ -121,6 +121,30 @@ set_board(i,board,sizeb[0],sizeb[1]);
 set_player(i,'J',13,39);
 draw_board(i,1);
 
+usleep(3000000);
+win_write_line_at(t,4,4,"A: So, I know I said that there are 3 tasks, but we don't have more ideas ");
+usleep(3000000);
+sprintf(points,"A: The final result is javiti = %d points and lucia = %d points",javiti,lucia);
+win_write_line_at(t,5,4,points);
+usleep(3000000);
+if(javiti > lucia){
+  win_write_line_at(t,6,4,"A: Javiti wins!");
+  free(p);
+  usleep(3000000);
+  return 1;
+}
+if(javiti < lucia){
+  win_write_line_at(t,6,4,"A: Lucía wins!");
+  free(p);
+  usleep(3000000);
+  return 0;
+}
+if(javiti == lucia){
+  win_write_line_at(t,6,4,"A: It's a draw! What a pity we don't have more tasks...");
+  free(p);
+  usleep(3000000);
+  return 2;
+}
 
 
 
@@ -140,7 +164,7 @@ void lucia_beer(void *b){
   int r = 7;
   lose = 0;
   while(r < 18 ){
-    usleep(3000000);
+    usleep(2500000);
     drink_beer(b,r,60);
     r++;
   }
@@ -168,18 +192,18 @@ int beer(Interface *i){
   s = get_score(i);
   b = get_board(i);
 
-  win_write_line_at(t,4,4,"A: Okay,in this first task ,the one who finishes the beer first is the winner");
+  win_write_line_at(t,4,4,"A: Okay,in this first task, the one who finishes the beer first is the winner");
   usleep(3000000);
   win_write_line_at(s,4,4,"Press the space bar ");
   win_write_line_at(s,5,4,"repeatedly to drink");
   usleep(5000000);
   win_write_line_at(t,5,4,"So this begins in 3");
   usleep(1000000);
-  win_write_line_at(t,5,25,"2");
+  win_write_line_at(t,5,24,"2");
   usleep(1000000);
-  win_write_line_at(t,5,27,"1");
+  win_write_line_at(t,5,26,"1");
   usleep(3000000);
-  win_write_line_at(t,5,29,"GO!");
+  win_write_line_at(t,5,28,"GO!");
 
   pthread_create(&pth, NULL, lucia_beer,(void*)(b));
   char p[30];
@@ -454,27 +478,27 @@ int cards(Interface *i){
   s = get_score(i);
   b = get_board(i);
 
-  win_write_line_at(t,4,4,"A:So,in this card game,each turn you'll be given a first card");
+  win_write_line_at(t,4,4,"A: So,in this card game, each turn you'll be given a first card");
   usleep(5000000);
-  win_write_line_at(t,5,4,"A:This card will have a value from 1 to 10");
+  win_write_line_at(t,5,4,"A: This card will have a value from 1 to 10");
   usleep(5000000);
-  win_write_line_at(t,6,4,"A: The card deck has 52 cards,4 of each number except of the 10.");
+  win_write_line_at(t,6,4,"A: The card deck has 52 cards, 4 of each number except of the 10.");
   usleep(5000000);
-  win_write_line_at(t,7,4,"A:There are 16 cards with value 10");
+  win_write_line_at(t,7,4,"A: There are 16 cards with value 10");
   usleep(5000000);
   draw_text(i,1);
   win_write_line_at(t,4,4,"A: After you recieve your card,you will have to say if the next card in ");
   win_write_line_at(t,5,4,"A: the deck is lower or bigger than your card");
   usleep(5000000);
-  win_write_line_at(t,6,4,"A:When you make your choice,you'll be given a second card(the next deck card)");
+  win_write_line_at(t,6,4,"A: When you make your choice, you'll be given a second card(the next deck card)");
   usleep(5000000);
   draw_text(i,1);
-  win_write_line_at(t,4,4,"A:If your answer is correct,you get one point.");
-  win_write_line_at(t,5,4,"A:If it's not,you loose one point(unless you have 0)");
+  win_write_line_at(t,4,4,"A: If your answer is correct, you get one point.");
+  win_write_line_at(t,5,4,"A: If it's not, you loose one point(unless you have 0)");
   usleep(5000000);
-  win_write_line_at(t,6,4,"A:The first one who gets to 5 points win");
+  win_write_line_at(t,6,4,"A: The first one who gets to 5 points win");
   usleep(4000000);
-  win_write_line_at(t,7,4,"A:So,Javiti,you start!");
+  win_write_line_at(t,7,4,"A: So, Javiti,you start!");
 
   sprintf(points,"Javiti: %d",jav);
   win_write_line_at(s,4,4,points);
@@ -509,7 +533,7 @@ int cards(Interface *i){
     if(card_get_value(deck_get_card(d,cc)) < card_get_value(deck_get_card(d,cc-1)) && next == 'b') win =0;
     if(card_get_value(deck_get_card(d,cc)) < card_get_value(deck_get_card(d,cc-1)) && next == 'l') win =1;
     if(card_get_value(deck_get_card(d,cc)) == card_get_value(deck_get_card(d,cc-1)) ) {
-      win_write_line_at(t,5,4,"Oh,it has the same value.Let's check the next card");
+      win_write_line_at(t,5,4,"Oh, it has the same value. Let's check the next card");
       cc++;
       usleep(3000000);
       draw_text(i,1);
@@ -535,7 +559,7 @@ int cards(Interface *i){
     usleep(5000000);
     draw_board(i,1);
     draw_text(i,1);
-    win_write_line_at(t,4,4,"Okay,now is Lucia's turn");
+    win_write_line_at(t,4,4,"Okay, now is Lucia's turn");
     usleep(2000000);
     draw_text(i,1);
     win_write_line_at(t,4,4,"Here's your first card!");
@@ -563,7 +587,7 @@ int cards(Interface *i){
     if(card_get_value(deck_get_card(d,cc)) < card_get_value(deck_get_card(d,cc-1)) && next == 'b') win =0;
     if(card_get_value(deck_get_card(d,cc)) < card_get_value(deck_get_card(d,cc-1)) && next == 'l') win =1;
     if(card_get_value(deck_get_card(d,cc)) == card_get_value(deck_get_card(d,cc-1)) ) {
-      win_write_line_at(t,5,4,"Oh,it has the same value.Let's check the next card");
+      win_write_line_at(t,5,4,"Oh, it has the same value. Let's check the next card");
       cc++;
       usleep(3000000);
       draw_text(i,1);
