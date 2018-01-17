@@ -235,6 +235,6 @@ int play_mane(Interface *i){
 	free(text);
 	free(score);
 	if (done == 5) return 1;
-	if (fail == 3) return -1;
+	if (fail == 3) return 0;
 	return -2;
 }

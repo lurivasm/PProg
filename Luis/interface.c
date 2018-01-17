@@ -197,7 +197,7 @@ sc_rectangle* get_text(Interface *i){
 }
 
 
-int* player_get_position( Interface *i){
+int* player_get_position(Interface *i){
 	if(!i) return NULL;
 	int *p;
 	p = (int*)malloc(sizeof(int)*2);
