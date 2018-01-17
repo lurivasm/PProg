@@ -1,6 +1,6 @@
 /*JUAN'S BRAIN*/
-#ifndef NUMBER_H
-#define NUMBER_H
+#ifndef JUAN_H
+#define JUAN_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,8 +16,8 @@
 #include "interface.h"
 
 #define ERR -1
-#define WIN 10
-#define LOOSE -10
+#define WIN 1
+#define LOOSE 0
 
 
 /*Generation of a random number: returns ERR or the random number*/
