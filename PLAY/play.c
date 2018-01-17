@@ -9,9 +9,9 @@
 
 #include <termios.h>
 #include <pthread.h>
-#include "interface.h"
+#include "world.h"
 #include "blackjack.h"
-#include "mane.h"
+#include "dani.h"
 
 struct termios initial;
 
@@ -23,13 +23,15 @@ void main(){
   World *w;
   int m;
 	int *p;
-  int j,game,flag = 1;
+  int j,game,flag = 1,res;
+  sc_rectangle *t,*b,*s;
+  Player *pl;
   char** board;
   char** score;
   char** text;
   int sizeb[2],sizes[2],sizet[2];
-  int played[12];
-  for(j = 0;j < 12 ; j++) played[j] = 0;
+  char* name = (char*)malloc(sizeof(char)*20);
+  char text[200];
   srand(time(NULL));
 
 
@@ -41,9 +43,9 @@ void main(){
   score = create_map("score",sizes);
   text = create_map("text",sizet);
 
-  /*i=inter_create(33,114,0,0,0,86,22,0);*/
+  i=inter_create(33,114,0,0,0,86,22,0);
   w = create_world();
-  i = get_interface();
+
 
   set_player(i,'J',12,35); /* 12 35 */
 	printf("\e[?25l");
@@ -59,11 +61,25 @@ void main(){
 	  set_text(i,text,sizet[0],sizet[1]);
 	  draw_text(i,1);
 
+    b = get_board(i);
+    t = get_text(i);
+    s = get_score(i);
+    pl = get_player(w);
+
+    sprintf(text,"%d%",)
+    win_write_line_at(s,4,4,)
+
 	while(1){
+    name = get_station(w);
+    if(strcmp(name,"JOAQUÍN VILUMBRALES") == 0) break;
+    win_write_line_at(b,2,33,name);
+    sprintf(text,"Oh,you fell asleep and you woke up in %s",name);
+    win_write_line_at(t,4,4,text);
+    usleep(3000000);
 		m = _read_key();
 		/*pressing q it exits*/
-		if (m == 'q')	break;
-
+		if (m == 'q')	return;
+    if (m == 'f') break;
 
 
 	  move(i,-m);
@@ -73,7 +89,7 @@ void main(){
 			draw_board(i,1);
       game = rand()%2;
       while(flag){
-        if(played[game] == 1){
+        if(read_played(w) == 1){
           game = rand()%2;
           continue;
         }
@@ -81,7 +97,7 @@ void main(){
       }
       switch (game) {
         case(0):
-          main_Blackjack(i);
+          res = main_Blackjack(i);
           break;
         case(1):
           break;
