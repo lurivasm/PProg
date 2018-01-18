@@ -48,7 +48,7 @@ ARTISTIC_STYLE_OPTIONS ?= $(MDIR)/.astylerc
 ## Configuracion de las herramientas
 CC       ?= gcc
 CFLAGS   := -Iinclude -ansi -pedantic -Wall -Wextra -std=c99
-LDFLAGS  :=
+LDFLAGS  := -pthread
 RM       := rm -fvd
 
 ## Nombre del zip generado

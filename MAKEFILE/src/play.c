@@ -9,8 +9,8 @@
 
 #include "play.h"
 
-struct termios initial;
 
+struct termios initial;
 
 
 
@@ -38,11 +38,11 @@ int play(World *w,Interface *i){
   text = create_map("text",sizet);
 
 
-
+  _term_init();
   set_player(i,'J',11,35); /* 12 35 */
 	printf("\e[?25l");
 	fflush(stdout);
-	 _term_init();
+
 
 	  set_board(i,board,sizeb[0],sizeb[1]);
 	  draw_board(i,1);
@@ -58,7 +58,7 @@ int play(World *w,Interface *i){
     s = get_score(i);
     pl = get_player(w);
 
-    sprintf(query,"%d (%%)",get_alcohol(pl));
+    sprintf(query,"Life : %d (%%)",get_alcohol(pl));
     win_write_line_at(s,4,4,query);
 
 	while(1){
@@ -68,7 +68,10 @@ int play(World *w,Interface *i){
     if(strcmp(name,"JOAQUÍN VILUMBRALES") == 0) break;
     sprintf(query,"Oh,you fell asleep and you woke up in %s",name);
     win_write_line_at(t,4,4,query);
+    sprintf(query,"Life : %d (%%)",get_alcohol(pl));
+    win_write_line_at(s,4,4,query);
     usleep(3000000);
+
     while(1){
 		    m = _read_key();
 		    /*pressing q it exits*/
@@ -78,10 +81,10 @@ int play(World *w,Interface *i){
 		    p = player_get_position(i);
         if(p[1] == 83 && (p[0] == 3 || p[0] == 4 || p[0] == 5 ))break;
     }
-    if(minigames(w) == 2) break;
+
 			set_player(i,' ',0,0);
 			draw_board(i,1);
-      game = rand()%2;
+      game = rand()%6;
 
       while(flag){
 
@@ -91,9 +94,10 @@ int play(World *w,Interface *i){
         }
         flag = 0;
       }
+       game = 6;
       switch (game) {
         case 0:
-          res = main_Blackjack(i);
+          res = main_Blackjack(i,w);
           break;
         case 1:
           res = main_dani(i);
@@ -102,6 +106,8 @@ int play(World *w,Interface *i){
           res = main_lucia(i);
           break;
         case 3:
+          draw_text(i,1);
+          draw_score(i,1);
           res = main_juan(i);
           break;
         case 4:
@@ -110,8 +116,10 @@ int play(World *w,Interface *i){
         case 5:
           res = play_mane(i);
           break;
-        /*case 6:
-        case 7:*/
+        case 6:
+          res = main_hangman(i);
+          break;
+        /*case 7:*/
       }
       write_played(w,game);
 
@@ -142,6 +150,7 @@ int play(World *w,Interface *i){
           break;
       }
 
+      if(get_alcohol(pl) >=100) return -1;
       set_player(i,'J',4,83);
       set_board(i,board,sizeb[0],sizeb[1]);
       draw_board(i,1);
@@ -149,14 +158,19 @@ int play(World *w,Interface *i){
       draw_score(i,1);
 
       win_write_line_at(b,2,33,name);
-      sprintf(query,"%d (%%)",get_alcohol(pl));
+      sprintf(query,"Life : %d (%%)",get_alcohol(pl));
       win_write_line_at(s,4,4,query);
       usleep(1000000);
       win_write_line_at(s,6,4,"Get to the train");
       while(1){
         m = _read_key();
-        if(m == 'q') return;
-        if(m == 'f') break;
+        if(m == 'q'){
+          tcsetattr(fileno(stdin), TCSANOW, &initial);	/*We now restore the settings we back-up'd
+        							so that the termial behaves normally when
+        							the program ends*/
+          return;
+        }
+
         move(i,-m);
         p = player_get_position(i);
         if(p[0] == 11) break;
@@ -166,6 +180,7 @@ int play(World *w,Interface *i){
       set_board(i,board,sizeb[0],sizeb[1]);
       set_player(i," ",0,0);
       draw_board(i,1);
+      draw_score(i,1);
       usleep(5000000);
       board = create_map("mapa_metro.txt",sizeb);
       set_board(i,board,sizeb[0],sizeb[1]);
@@ -193,7 +208,8 @@ int play(World *w,Interface *i){
 	free(board);
 	free(text);
 	free(score);
-	tcsetattr(fileno(stdin), TCSANOW, &initial);	/*We now restore the settings we back-up'd
+
+  tcsetattr(fileno(stdin), TCSANOW, &initial);	/*We now restore the settings we back-up'd
 							so that the termial behaves normally when
 							the program ends*/
 }
