@@ -27,6 +27,7 @@ Player* get_player(World *w);
 void save(World *w,int num);
 int load(World* w,int num);
 
+void delete(World* w,int num);
 
 
 #endif

@@ -110,7 +110,7 @@ int number_rand(int min, int max){
 
 int Juan(Interface *in){
   int i, j, number, errs = 0, col, fila, key;
-  char numchar[5], errchar[8], answer[5];
+  char numchar[20], errchar[8], answer[20];
   sc_rectangle *t, *s, *b;
 
   t = get_text(in);

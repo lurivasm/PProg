@@ -72,9 +72,11 @@ int play(World *w,Interface *i){
       sav = _read_key();
       if(sav != 'y' && sav != 'n') continue;
       if(sav == 'y'){
+        tcsetattr(fileno(stdin), TCSANOW, &initial);
         slot : win_write_line_at(t,5,4,"In which slot you want to save the game?[1/2/3]:");
         fscanf(stdin,"%d",&sav);
         if(sav != 1 && sav != 2 && sav != 3) goto slot;
+        _term_init();
         save(w,sav);
       }
       draw_text(i,1);
@@ -108,7 +110,7 @@ int play(World *w,Interface *i){
         }
         flag = 0;
       }
-      
+
       switch (game) {
         case 0:
           res = main_Blackjack(i,w);
@@ -226,7 +228,7 @@ final:  win_write_line_at(t,4,4,"Oh,you got home!");
       if(p[1] == 83 && (p[0] == 3 || p[0] == 4 || p[0] == 5 ))break;
   }
 
-    res = main_javiti(i);
+    res = main_javiti(i,w);
 
 
 

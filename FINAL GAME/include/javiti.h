@@ -14,6 +14,7 @@
 #include <termios.h>
 #include <pthread.h>
 #include "interface.h"
+#include "world.h"
 
 #define ERR -1
 #define WIN 1
@@ -21,9 +22,9 @@
 
 
 /*The minigame: returns ERR, WIN or LOOSE*/
-int Javiti(Interface *i);
+int Javiti(Interface *i,World *w);
 
 /*The final game with interface*/
-int  main_javiti(Interface *i);
+int  main_javiti(Interface *i,World *w);
 
 #endif

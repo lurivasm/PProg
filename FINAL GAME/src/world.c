@@ -117,3 +117,13 @@ int load(World* w,int num){
 
   fclose(f);
 }
+
+
+void delete(World* w,int num){
+  FILE *f;
+  if(num == 1) f = fopen("1_game.txt","w");
+  if(num == 2) f = fopen("2_game.txt","w");
+  if(num == 3) f = fopen("3_game.txt","w");
+  fclose(f);
+
+}
