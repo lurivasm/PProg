@@ -146,7 +146,7 @@ int play_luis (Interface *i){
 
 		score = create_map("score",sizes);
 		text = create_map("text",sizet);
-		board = create_map("board",sizeb);
+		board = create_map("begining.txt",sizeb);
 
 		set_score(i,score,sizes[0],sizes[1]);
 		draw_score(i,1);
