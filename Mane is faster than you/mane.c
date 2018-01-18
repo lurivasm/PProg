@@ -3,36 +3,10 @@
 #include <time.h>
 #include <termios.h>
 #include <pthread.h>
-struct termios initial;
+
 
 int flag = 0;
 
-void _term_init() {
-	struct termios new;/*a termios structure contains a set of attributes about
-					  how the terminal scans and outputs data*/
-
-	tcgetattr(fileno(stdin), &initial);    /*first we get the current settings of out
-						 terminal (fileno returns the file descriptor
-						 of stdin) and save them in initial. We'd better
-						 restore them later on*/
-	new = initial;	                      /*then we copy them into another one, as we aren't going
-						to change ALL the values. We'll keep the rest the same */
-	new.c_lflag &= ~ICANON;	              /*here we are setting up new. This line tells to stop the
-						canonical mode (which means waiting for the user to press
-						enter before sending)*/
-	new.c_lflag &= ~ECHO;                 /*by deactivating echo, we tell the terminal NOT TO
-						show the characters the user is pressing*/
-	new.c_cc[VMIN] = 1;                  /*this states the minimum number of characters we have
-					       to receive before sending is 1 (it means we won't wait
-					       for the user to press 2,3... letters)*/
-	new.c_cc[VTIME] = 0;	              /*I really have no clue what this does, it must be somewhere in the book tho*/
-	new.c_lflag &= ~ISIG;                 /*here we discard signals: the program won't end even if we
-						press Ctrl+C or we tell it to finish*/
-
-	tcsetattr(fileno(stdin), TCSANOW, &new);  /*now we SET the attributes stored in new to the
-						    terminal. TCSANOW tells the program not to wait
-						    before making this change*/
-}
 void ck_count(void* max){
 	time_t itime;
 	itime=time(NULL);
@@ -94,7 +68,8 @@ int play_mane(Interface *i){
 	int done = 0,fail = 0,res,quit;
 	int v[1];
 	pthread_t pth;
-	char map;
+	char map[10];
+	int wololo;
 	int sizeb[2],sizes[2],sizet[2];
 	int mover;
 	int nextcol,nextrow;
@@ -105,6 +80,7 @@ int play_mane(Interface *i){
 	sc_rectangle* t, *s;
 	char p[280];
 
+	srand (time(NULL));
 	printf("\e[?25l");
 	fflush(stdout);
 	if (i == NULL) return -1;
@@ -127,7 +103,7 @@ int play_mane(Interface *i){
 
 	s = get_score(i);
 
-	_term_init();
+
 
 	win_write_line_at(t,4,4,"Press the space bar to continue");
 
@@ -146,7 +122,7 @@ int play_mane(Interface *i){
 	while(1){
 	quit = _read_key();
 	/*pressing q it exits*/
-	if (quit == 'q')  return;
+	if (quit == 'q')  return 1;
 	/*if you press the space bar,you move foward*/
 	if(quit == 32){
 		int k;
@@ -169,11 +145,13 @@ int play_mane(Interface *i){
 	win_write_line_at(s,8,6,"Fail: 0");
 
 	while (done<5 && fail<3){
-		/*map=aleat_num(1,1);*/
 
+		wololo=(rand()%3) + 1;
 		draw_text(i,1);
 
-		board = create_map("1.txt",sizeb);
+		sprintf(map,"%d.txt",wololo);
+
+		board = create_map(map,sizeb);
 
 		set_board(i,board,sizeb[0],sizeb[1]);
 		set_player(i,'J',21,45);
@@ -185,14 +163,13 @@ int play_mane(Interface *i){
 		res = mane(board,i);
 		if (res == 3){
 			pthread_cancel(pth);
-			tcsetattr(fileno(stdin), TCSANOW, &initial);
 			return 1;
 		}
 		if (res == 1){
 			pthread_cancel(pth);
 			done++;
 			sprintf(p,"%d",done);
-			win_write_line_at(s,6,12,p);
+			win_write_line_at(s,6,11,p);
 		}
 		else if (res == 0){
 			pthread_cancel(pth);
@@ -205,7 +182,7 @@ int play_mane(Interface *i){
 		while(1){
 		quit = _read_key();
 		/*pressing q it exits*/
-		if (quit == 'q')  return;
+		if (quit == 'q')  return 	1;
 		/*if you press the space bar,you move foward*/
 		if(quit == 32){
 			int k;
@@ -229,7 +206,6 @@ int play_mane(Interface *i){
 	for(j = 0;j<sizes[0];j++){
 		free(score[j]);
 	}
-	tcsetattr(fileno(stdin), TCSANOW, &initial);
 
 	free(board);
 	free(text);
