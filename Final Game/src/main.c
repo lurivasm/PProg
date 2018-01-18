@@ -49,7 +49,7 @@ void first_scene(Interface* i){
     t = get_text(i);
 
 
-    /*win_write_line_at(t,4,4,"After a long night in Zoewie, it's time to go home");
+    win_write_line_at(t,4,4,"After a long night in Zoewie, it's time to go home");
     usleep(4000000);
 		draw_text(i,1);
 
@@ -67,7 +67,7 @@ void first_scene(Interface* i){
 
     win_write_line_at(t,4,4,"Javiti: Of course. I'm not an idiot.");
     usleep(4000000);
-		draw_text(i,1);*/
+		draw_text(i,1);
 
     win_write_line_at(t,4,4,"Objetive: Go to Plaza de Hispania");
 

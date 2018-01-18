@@ -1,15 +1,3 @@
-/************************************************/
-/*              PPROG VIDEOGAME                 */
-/*         DREAM OF A JAVITI'S NIGHT            */
-/*                                              */
-/*  Members of the group:                       */
-/*           - Javier Martínez                  */
-/*           - Lucía Rivas                      */
-/*           - Daniel Santo-Tomás               */
-/*           - Juan Velasco                     */
-/*                                              */
-/*  Made by: Daniel Santo-Tomás                 */
-/************************************************/
 #ifndef WORLD_H
 #define WORLD_H
 
@@ -39,6 +27,7 @@ Player* get_player(World *w);
 void save(World *w,int num);
 int load(World* w,int num);
 
+void delete(World* w,int num);
 
 
 #endif

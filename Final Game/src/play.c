@@ -1,15 +1,3 @@
-/************************************************/
-/*              PPROG VIDEOGAME                 */
-/*         DREAM OF A JAVITI'S NIGHT            */
-/*                                              */
-/*  Members of the group:                       */
-/*           - Javier Martínez                  */
-/*           - Lucía Rivas                      */
-/*           - Daniel Santo-Tomás               */
-/*           - Juan Velasco                     */
-/*                                              */
-/*  Made by: Daniel Santo-Tomás                 */
-/************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -84,9 +72,11 @@ int play(World *w,Interface *i){
       sav = _read_key();
       if(sav != 'y' && sav != 'n') continue;
       if(sav == 'y'){
+        tcsetattr(fileno(stdin), TCSANOW, &initial);
         slot : win_write_line_at(t,5,4,"In which slot you want to save the game?[1/2/3]:");
         fscanf(stdin,"%d",&sav);
         if(sav != 1 && sav != 2 && sav != 3) goto slot;
+        _term_init();
         save(w,sav);
       }
       draw_text(i,1);
@@ -150,7 +140,6 @@ int play(World *w,Interface *i){
           break;
       }
       write_played(w,game);
-
 
       switch (res) {
         case 0 :
@@ -238,7 +227,7 @@ final:  win_write_line_at(t,4,4,"Oh,you got home!");
       if(p[1] == 83 && (p[0] == 3 || p[0] == 4 || p[0] == 5 ))break;
   }
 
-    res = main_javiti(i);
+    res = main_javiti(i,w);
 
 
 

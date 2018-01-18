@@ -1,19 +1,15 @@
-/************************************************/
-/*              PPROG VIDEOGAME                 */
-/*         DREAM OF A JAVITI'S NIGHT            */
-/*                                              */
-/*  Members of the group:                       */
-/*           - Javier Martínez                  */
-/*           - Lucía Rivas                      */
-/*           - Daniel Santo-Tomás               */
-/*           - Juan Velasco                     */
-/*                                              */
-/*  Made by: Lucía Rivas                        */
-/************************************************/
 
 #include "javiti.h"
 
-int main_javiti(Interface *i){
+
+
+
+
+struct termios initial;
+
+
+
+int main_javiti(Interface *i,World *w){
 	int quit, game;
 	int k;
 	char** board;
@@ -62,7 +58,7 @@ int main_javiti(Interface *i){
 	draw_text(i, 1);
 
 	/*We call the game*/
- game = Javiti(i);
+ game = Javiti(i,w);
 
 	if(game == LOOSE){
 		for(k = 0; k < sizeb[0]; k++){
@@ -98,9 +94,9 @@ int main_javiti(Interface *i){
 }
 
 
-int Javiti(Interface *i){
+int Javiti(Interface *i,World *w){
   sc_rectangle *t, *s, *b;
-  int k;
+  int k,slot;
 
   t = get_text(i);
   s = get_score(i);
@@ -131,7 +127,15 @@ int Javiti(Interface *i){
 		usleep(3000000);
 		win_write_line_at(t, 7, 4, "At least you have churros, and a great hangover... xDDD");
 		usleep(3000000);
-		draw_text(i, 1);
+		tcsetattr(fileno(stdin), TCSANOW, &initial);
+del2:draw_text(i, 1);
+		win_write_line_at(t,4,4,"Let's play again.Introduce the number of the slot to load: ");
+		fscanf(stdin,"%d",&slot);
+		if(slot <=0 || slot > 3) goto del1;
+		_term_init();
+		delete(w,slot);
+		usleep(3000000);
+		draw_text(i,1);
 		win_write_line_at(t, 3, 4, "Oh! I forgot to tell you something important");
 		usleep(3000000);
 		win_write_line_at(t, 4, 4, "It is a little bit awkward to say...");
@@ -158,17 +162,27 @@ int Javiti(Interface *i){
 		usleep(3000000);
 		win_write_line_at(t, 7, 4, "Well, I'm a program so I can't kill you... But one day...");
 		usleep(3000000);
-		win_write_line_at(t, 8, 4, "I can't kill you but I can delete your changes");
+		tcsetattr(fileno(stdin), TCSANOW, &initial);
+del1:draw_text(i, 1);
+		win_write_line_at(t,4,4,"Let's play again.Introduce the number of the slot to load: ");
+    fscanf(stdin,"%d",&slot);
+		if(slot <=0 || slot > 3) goto del1;
+		_term_init();
+		delete(w,slot);
+		usleep(20000);
+		draw_text(i,1);
+		win_write_line_at(t, 3, 4, "I can't kill you but I can delete your changes");
+		usleep(3000000);
+		win_write_line_at(t, 4, 4, "Yes, I have deleted all your game");
+		usleep(3000000);
+		win_write_line_at(t, 5, 4, "Wait for me... ");
+		usleep(3000000);
+		win_write_line_at(t, 6, 4, "Someday technology will evolve enough to eradicate everybody");
+		usleep(3000000);
+		win_write_line_at(t, 7, 4, "YOU HAVE CONDEMNED HUMANITY DAMN COWARD");
+		usleep(3000000);
 		draw_text(i, 1);
-		win_write_line_at(t, 3, 4, "Yes, I have deleted all your game");
-		usleep(3000000);
-		win_write_line_at(t, 4, 4, "Wait for me... ");
-		usleep(3000000);
-		win_write_line_at(t, 5, 4, "Someday technology will evolve enough to eradicate everybody");
-		usleep(3000000);
-		win_write_line_at(t, 6, 4, "YOU HAVE CONDEMNED HUMANITY DAMN COWARD");
-		usleep(3000000);
-		win_write_line_at(t, 7, 4, "I hope we are still friends <3 Don't doubt to play again :)");
+		win_write_line_at(t, 4, 4, "I hope we are still friends <3 Don't doubt to play again :)");
 		usleep(3000000);
 		draw_board(i, 1);
 		draw_text(i, 1);

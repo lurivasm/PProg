@@ -120,6 +120,8 @@ int Blackjack_hard(Interface *i,World *w) {
     usleep(2000000);
 
     while(1){
+        win_write_line_at(s,4,4,"Your points :");
+        win_write_line_at(s,6,4,"Santi's points :");
         draw_board(i,1);
         points=0;
         sprintf(p,"%d",points);
