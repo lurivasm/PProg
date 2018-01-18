@@ -10,6 +10,7 @@
 #include <string.h>
 #include <time.h>
 #include <ctype.h>
+#include "interface.h"
 
 typedef struct _hangman hangman;
 
@@ -17,6 +18,6 @@ hangman* hangman_ini(char* file1);
 
 void hangman_destroy(hangman* hm);
 
-void hangman_play(hangman* hm, FILE* out, FILE* in);
+int hangman_play(hangman* hm, FILE* out, FILE* in, Interface* ini);
 
 # endif

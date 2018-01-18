@@ -9,6 +9,8 @@ struct _hangman{
 	char* palabras[30];
 };
 
+struct termios initial;
+
 
 
 hangman* hangman_ini(char* file) {
@@ -61,88 +63,78 @@ void hangman_destroy(hangman* hm) {
 	free(hm);
 }
 
-void current_errors(int i, FILE* out) {
+void current_errors(int i, sc_rectangle *b) { /*We draw the hangman depending on the number of mistakes in one word*/
 
-    if (out==NULL) {
-      return;
-    }
      switch (i) {
          case 0 :
-          fprintf(out,"\n\n");
-          fprintf(out,"\n");
-          fprintf(out,"  |\n");
-          fprintf(out,"  |\n");
-          fprintf(out,"  |\n");
-          fprintf(out,"  |\n");
-          fprintf(out,"  |\n");
-          fprintf(out,"__|_________\n\n");
+          win_write_line_at(b,10,33," ");
+          win_write_line_at(b,11,33,"  |");
+          win_write_line_at(b,12,33,"  |");
+          win_write_line_at(b,13,33,"  |");
+          win_write_line_at(b,14,33,"  |");
+          win_write_line_at(b,15,33,"  |");
+          win_write_line_at(b,16,33,"__|_________");
          break;
          case 1 :
-          fprintf(out,"\n\n");
-          fprintf(out,"  _______\n");
-          fprintf(out,"  |/\n");
-          fprintf(out,"  |\n");
-          fprintf(out,"  |\n");
-          fprintf(out,"  |\n");
-          fprintf(out,"  |\n");
-          fprintf(out,"__|_________\n\n");
+          win_write_line_at(b,10,33,"  _______");
+          win_write_line_at(b,11,33,"  |/");
+          win_write_line_at(b,12,33,"  |");
+          win_write_line_at(b,13,33,"  |");
+          win_write_line_at(b,14,33,"  |");
+          win_write_line_at(b,15,33,"  |");
+          win_write_line_at(b,16,33,"__|_________");
          break;
          case 2 :
-          fprintf(out,"\n\n");
-          fprintf(out,"  _______\n");
-          fprintf(out,"  |/   | \n");
-          fprintf(out,"  |    O \n");
-          fprintf(out,"  |    |\n");
-          fprintf(out,"  |    |\n");
-          fprintf(out,"  |\n");
-          fprintf(out,"__|_________\n\n");
+          win_write_line_at(b,10,33,"  _______");
+          win_write_line_at(b,11,33,"  |/   | ");
+          win_write_line_at(b,12,33,"  |    O ");
+          win_write_line_at(b,13,33,"  |    |");
+          win_write_line_at(b,14,33,"  |    |");
+          win_write_line_at(b,15,33,"  |");
+          win_write_line_at(b,16,33,"__|_________");
          break;
-         case 3:
-          fprintf(out,"\n\n");
-          fprintf(out,"  _______\n");
-          fprintf(out,"  |/   | \n");
-          fprintf(out,"  |    O \n");
-          fprintf(out,"  |   \\|\n");
-          fprintf(out,"  |    | \n");
-          fprintf(out,"  |\n");
-          fprintf(out,"__|_________\n\n");
+         case 3 :
+          win_write_line_at(b,10,33,"  _______");
+          win_write_line_at(b,11,33,"  |/   | ");
+          win_write_line_at(b,12,33,"  |    O ");
+          win_write_line_at(b,13,33,"  |   \\|");
+          win_write_line_at(b,14,33,"  |    | ");
+          win_write_line_at(b,15,33,"  |");
+          win_write_line_at(b,16,33,"__|_________");
          break;
          case 4 :
-          fprintf(out,"\n\n");
-          fprintf(out,"  _______\n");
-          fprintf(out,"  |/   | \n");
-          fprintf(out,"  |    O \n");
-          fprintf(out,"  |   \\|/\n");
-          fprintf(out,"  |    | \n");
-          fprintf(out,"  |\n");
-          fprintf(out,"__|_________\n\n");
+          win_write_line_at(b,10,33,"  _______");
+          win_write_line_at(b,11,33,"  |/   | ");
+          win_write_line_at(b,12,33,"  |    O ");
+          win_write_line_at(b,13,33,"  |   \\|/");
+          win_write_line_at(b,14,33,"  |    | ");
+          win_write_line_at(b,15,33,"  |");
+          win_write_line_at(b,16,33,"__|_________");
          break;
          case 5 :
-          fprintf(out,"\n\n");
-          fprintf(out,"  _______\n");
-          fprintf(out,"  |/   | \n");
-          fprintf(out,"  |    O \n");
-          fprintf(out,"  |   \\|/\n");
-          fprintf(out,"  |    | \n");
-          fprintf(out,"  |   /\n");
-          fprintf(out,"__|_________\n\n");
+          win_write_line_at(b,10,33,"  _______");
+          win_write_line_at(b,11,33,"  |/   | ");
+          win_write_line_at(b,12,33,"  |    O ");
+          win_write_line_at(b,13,33,"  |   \\|/");
+          win_write_line_at(b,14,33,"  |    | ");
+          win_write_line_at(b,15,33,"  |   /");
+          win_write_line_at(b,16,33,"__|_________");
          break;
          case 6 :
-				 fprintf(out,"\n\n");
-				 fprintf(out,"  _______\n");
-				 fprintf(out,"  |/   | \n");
-				 fprintf(out,"  |    X \n");
-				 fprintf(out,"  |   \\|/\n");
-				 fprintf(out,"  |    | \n");
-				 fprintf(out,"  |   / \\\n");
-				 fprintf(out,"__|_________\n\n");
+				 win_write_line_at(b,10,33,"  _______");
+				 win_write_line_at(b,11,33,"  |/   | ");
+				 win_write_line_at(b,12,33,"  |    X ");
+				 win_write_line_at(b,13,33,"  |   \\|/");
+				 win_write_line_at(b,14,33,"  |    | ");
+				 win_write_line_at(b,15,33,"  |   / \\");
+				 win_write_line_at(b,16,33,"__|_________");
 				break;
 
      }
     }
 
-void print_current_word(char* cword, char* gword, FILE* out) {
-  int i;
+void print_current_word(char* cword, char* gword, FILE* out, sc_rectangle* b) { /*We print the current word with the correctly guessed words*/
+  int i, p=5;
 
   if ((cword== NULL) || (gword==NULL) || (out==NULL)) {
     return;
@@ -151,19 +143,19 @@ void print_current_word(char* cword, char* gword, FILE* out) {
 
     if (gword[i] == cword[i]) {
 
-      fprintf(out, " %c ", toupper(cword[i]));
+      win_write_char_at(b, 20,p , toupper(cword[i]));
     }
 
     else if( gword[i] == ' ') {
 
-        fprintf(out, "  ");
+        win_write_line_at(b, 20, p, "  ");
 
     }
 
     else {
-      fprintf(out, " _ ");
+      win_write_line_at(b, 20, p, " _ ");
     }
-
+		p = p+3;
 
     }
 
@@ -192,58 +184,52 @@ int c_is_in_words(int *words, int a, int tamanio) {
 	return 0;
 }
 
-void showLogo(FILE* out) {
 
-          if(out==NULL) {
-            return;
-          }
-
-          fprintf(out,"--------------------------------------------\n");
-          fprintf(out,"| #  #   #   #   #  #### #   #   #   #   # |\n");
-          fprintf(out,"| #  #  # #  ##  # #     ## ##  # #  ##  # |\n");
-          fprintf(out,"| #### ##### # # # #  ## # # # ##### # # # |\n");
-          fprintf(out,"| #  # #   # #  ## #   # #   # #   # #  ## |\n");
-          fprintf(out,"| #  # #   # #   #  ###  #   # #   # #   # |\n");
-          fprintf(out,"--------------------------------------------\n\n");
-    }
-
-void hangman_play( hangman* hm, FILE* out, FILE* in) {
-	char c;
-	int a =0,aa, b=0, z=0,  d=0, y=0, k=0, l, i,t,s,  guessedLetter=0, length,*words,inf,max,cat_aux;
+int hangman_play( hangman* hm, FILE* out, FILE* in, Interface* ini) {
+	char c, w[50], aciertos[3], errores[3];
+	int a =0,aa, v=0, z=0,  d=0, y=0, k=0, l, i,q,n,p,  guessedLetter=0, length,*words,inf,max,cat_aux;
 	char cat;
 	int flag = 0;
 	int j;
 	char *currentWord, *guessWord, *wrongLetters;
 
-  if ((hm==NULL) || (out == NULL) || (in==NULL)) return;
+  if ((hm==NULL) || (out == NULL) || (in==NULL)) return -1;
 
 
 
   words = (int*)malloc(sizeof(int) * 10);
   if (words==NULL) {
-    return;
+    return -1;
   }
 	wrongLetters = (char*)malloc(6);
 
+	sc_rectangle *t, *s, *b;
 
-  showLogo(stdout);
+    t = get_text(ini);
+    s = get_score(ini);
+    b = get_board(ini);
 
-  fprintf(out,
-     "Welcome to the game Hangman!\n"
-      "The objective in this game is to guess the word.\n"
-      "You can enter lowercase or uppercase letters.\n"
-      "You are allowed to enter just one letter at a time.\n"
-      "You will loose if you have guessed 6 letters wrong.\n"
-      "You pass the minigame if you guess 3 words correctly\n"
-      "and you loose if you fail 2 words.\n"
-      "Let´s start with the first word!\n");
+
+    win_write_line_at(s, 4, 4, "Welcome to HANGMAN!");
+    win_write_line_at(s, 6, 4," Guess the word!");
+    win_write_line_at(s, 8, 4," 6 wrong letters = Loose");
+    win_write_line_at(s, 10, 4," 3 correct words = Win");
+    win_write_line_at(s, 12, 4," 2 wrong words = Fail");
+    win_write_line_at(s, 14, 4," Let´s start!");
+
+
 
 
 	while (hm->errores_palabras < 2 && hm->aciertos_palabras < 3) {
 		flag = 0;
+		draw_text(ini,1);
 		while(flag == 0){
-			fprintf(out, "\n\nChoose a category for the next word (You can choose one category only twice during the game):\n\tHistorical Figures (press 1)\n\tFilms (press 2)\n\tCountries (press 3)\n\t");
-			fscanf(in, "%c", &cat);
+			win_write_line_at(t,4,4, "Choose a category for the next word:");
+			win_write_line_at(t,5,8, "Historical Figures (press 1)");
+			win_write_line_at(t,6,8, "Films (press 2 )");
+			win_write_line_at(t,7,8, "Countries (press 3)");
+			tcsetattr(fileno(stdin), TCSANOW, &initial);
+			fscanf(in, " %c", &cat);
 			cat_aux = cat;
 			switch(cat) {
 				case(49):
@@ -255,7 +241,7 @@ void hangman_play( hangman* hm, FILE* out, FILE* in) {
 				case(50):
 					inf = 7;
 					max = 13;
-					b++;
+					v++;
 					flag = 1;
 					break;
 				case(51):
@@ -269,40 +255,12 @@ void hangman_play( hangman* hm, FILE* out, FILE* in) {
 					max = 28;
 					break;*/
 				default:
-					fprintf(out,"You have to enter either 1, 2 or 3\n");
+					win_write_line_at(t,8,4,"You have to enter either 1, 2 or 3");
 			}
 		}
-	if ((a > 2) || (b > 2) || (d>2)) {
-		while(cat == cat_aux) {
-		fprintf(out, "\nYou can choose a category only twice. Try again:\n");
-		fscanf(in, "%c", &cat);
-		switch(cat) {
-		case(49):
-			inf = 0;
-			max = 6;
-			a++;
-			break;
-		case(50):
-			inf = 7;
-			max = 13;
-			b++;
-			break;
-		case(51):
-			inf = 14;
-			max = 21;
-			d++;
-			break;
-		/*case(4):
-			inf = 22;
-			max = 28;
-			break;*/
-		}
-		}
-
-	}
     hm->errores = 0;
 		k=0;
-    j= randomNumber(inf, max);
+    j= randomNumber(inf, max); /*We choose a random word (which can not be repeated)*/
 		words[z]=j;
 
 		if (z>0) {
@@ -323,26 +281,42 @@ void hangman_play( hangman* hm, FILE* out, FILE* in) {
 		strcpy(guessWord, hm->palabras[j]);
 
 		y=0;
-    /*fprintf(out, "\n%s\n", guessWord);*/
-		for (s=0; s < length; s++) {
-		if(guessWord[s] == ' ') {
+		draw_score(ini, 1);
+		sprintf(aciertos, "%d", hm->aciertos_palabras);
+		sprintf(errores, "%d", hm->errores_palabras);
+		win_write_line_at(s,20,4,"-----------------------");
+		win_write_line_at(s,22,4,"--- Current Results ---");
+		win_write_line_at(s,24,4,"-----------------------");
+		win_write_line_at(s, 26, 4, "Words guessed correctly:");
+		win_write_line_at(s,26,28, aciertos);
+		win_write_line_at(s, 28, 4, "Words guessed wrong: ");
+		win_write_line_at(s, 28, 24,errores);
 
-        fprintf(out, "  ");
+		p=5;
 
-    }
+		for (n=0; n < length; n++) {
+			if(guessWord[n] == ' ') {
 
-    else {
-      fprintf(out, " _ ");
-    }
+        win_write_line_at(b,20,p, "   ");
+
+    	}
+			else {
+      	win_write_line_at(b,20,p, " _ ");
+    	}
+		p=p+3;
 	}
-		fprintf(out, "\n\nIntroduce a letter:\n");
-		fprintf(out, "\n\n");
-		fscanf(in, " %c", &c);
+		win_write_line_at(b, 20, 4, w);
+		draw_text(ini,1);
+		win_write_line_at(t,6,4, "Introduce a letter: ");
+		tcsetattr(fileno(stdin), TCSANOW, &initial);
+		fscanf(stdin, " %c", &c);
 		 c = tolower(c);
+		 win_write_char_at(t, 8, 4, c);
+
 
     while ( (strcmp(currentWord, guessWord) != 0) && (hm->errores < 6) ) {
           guessedLetter =0;
-      for (i = 0; i < length; i++) {
+      for (i = 0; i < length; i++) { /*We make sure if the introduced letter is in the word or not*/
         if (guessWord[i] == c) {
           currentWord[i] = c;
           guessedLetter=1;
@@ -353,60 +327,93 @@ void hangman_play( hangman* hm, FILE* out, FILE* in) {
         hm->errores++;
 				wrongLetters[k] = c;
 				k++;
-        fprintf(out, "The letter was incorrect.\n");
+				draw_text(ini,1);
+        win_write_line_at(t,4,4, "The letter was incorrect.");
 				}
       else if (guessedLetter == 1) {
         guessedLetter = 0;
-        fprintf(out, "The letter was correct.\n");
+				draw_text(ini,1);
+        win_write_line_at(t,4,4, "The letter was correct.");
       }
-
-			fprintf(out, "Letters you guessed wrong:");
-			for (t=0; t < k; t++) {
-				fprintf(out, "%c ", toupper(wrongLetters[t]));
+			draw_score(ini,1);
+			win_write_line_at(s,20,4,"-----------------------");
+			win_write_line_at(s,22,4,"--- Current Results ---");
+			win_write_line_at(s,24,4,"-----------------------");
+			win_write_line_at(s, 26, 4, "Words guessed correctly:");
+			win_write_line_at(s,26,28, aciertos);
+			win_write_line_at(s, 28, 4, "Words guessed wrong: ");
+			win_write_line_at(s, 28, 24,errores);
+			win_write_line_at(s,4,4, "Letters guessed wrong:");
+			p=4;
+			for (q=0; q < k; q++) {
+				win_write_char_at(s, 6,p, toupper(wrongLetters[q])); /*We print the letters guessed wrong*/
+				p=p+2;
 			}
-      current_errors(hm->errores, stdout);
+			draw_board(ini,1);
+      current_errors(hm->errores, b);
 
       if ( (strcmp(currentWord, guessWord) != 0) && (hm->errores < 6) ) {
-            print_current_word(currentWord, guessWord, out);
-            fprintf(out,"\n\nEnter the letter(s) you want to guess:\n ");
+            print_current_word(currentWord, guessWord, out, b);
+            win_write_line_at(t,6,4,"Enter the letter(s) you want to guess: ");
             fscanf(in, " %c", &c);
 						 c = tolower(c);
         }
 		}
+		draw_score(ini,1);
 
 		if (hm->errores < 6) {
 			if (strcmp(currentWord, guessWord) == 0) {
-				fprintf(out, "Congratulations you have guessed the right word! Let´s go for the next one!\n");
 				hm->aciertos_palabras++;
-        fprintf(out,"-----------------------\n");
-        fprintf(out,"--- Current Results ---\n");
-        fprintf(out,"-----------------------\n");
-        fprintf(out, "Words guessed correctly: %d\nWords guessed wrong: %d", hm->aciertos_palabras,hm->errores_palabras);
+				sprintf(aciertos, "%d", hm->aciertos_palabras);
+				sprintf(errores, "%d", hm->errores_palabras);
+				win_write_line_at(s,11,4, "Congratulations!");
+				win_write_line_at(s,12,4, "The word was right!");
+				win_write_line_at(s,20,4,"-----------------------");
+				win_write_line_at(s,22,4,"--- Current Results ---");
+				win_write_line_at(s,24,4,"-----------------------");
+				win_write_line_at(s, 26, 4, "Words guessed correctly:");
+				win_write_line_at(s,26,28, aciertos);
+				win_write_line_at(s, 28, 4, "Words guessed wrong: ");
+				win_write_line_at(s, 28, 24,errores);
 			}
 			else {
-				fprintf(out, "You have guessed the wrong word, better luck next time!\n");
+				win_write_line_at(s, 8, 4, "The word was wrong!");
+				win_write_line_at(s, 9, 4, "Better luck next time!");
 				hm->errores_palabras++;
+				sprintf(aciertos, "%d", hm->aciertos_palabras);
+				sprintf(errores, "%d", hm->errores_palabras);
 				for (l=0; l<length ; l++){
 	 				guessWord[l] = toupper(guessWord[l]);
 				}
-				fprintf(out, "The word was: %s\n", guessWord);
-        fprintf(out,"-----------------------\n");
-        fprintf(out,"--- Current Results ---\n");
-        fprintf(out,"-----------------------\n");
-        fprintf(out, "Words guessed correctly: %d\nWords guessed wrong: %d\n", hm->aciertos_palabras,hm->errores_palabras);
+				win_write_line_at(s,11,4, "The word was: ");
+				win_write_line_at(s,12,4,guessWord);
+				win_write_line_at(s,20,4,"-----------------------");
+				win_write_line_at(s,22,4,"--- Current Results ---");
+				win_write_line_at(s,24,4,"-----------------------");
+				win_write_line_at(s, 26, 4, "Words guessed correctly:");
+				win_write_line_at(s,26,28, aciertos);
+				win_write_line_at(s, 28, 4, "Words guessed wrong: ");
+				win_write_line_at(s, 28, 24,errores);
 			}
 		}
 		else if (hm->errores >= 6) {
-			fprintf(out, "You have guessed the wrong word, better luck next time!\n");
+			win_write_line_at(s, 8, 4, "The word was wrong!");
+			win_write_line_at(s, 9, 4, "Better luck next time!");
 			hm->errores_palabras++;
+			sprintf(aciertos, "%d", hm->aciertos_palabras);
+			sprintf(errores, "%d", hm->errores_palabras);
 			for (l=0; l<length ; l++) {
 				guessWord[l]=toupper(guessWord[l]);
 			}
-			fprintf(out, "The word was: %s\n", guessWord);
-      fprintf(out,"-----------------------\n");
-        fprintf(out,"--- Current Results ---\n");
-        fprintf(out,"-----------------------\n");
-        fprintf(out, "Words guessed correctly: %d\nWords guessed wrong: %d", hm->aciertos_palabras,hm->errores_palabras);
+			win_write_line_at(s,11,4, "The word was: ");
+			win_write_line_at(s,12,4,guessWord);
+			win_write_line_at(s,20,4,"-----------------------");
+			win_write_line_at(s,22,4,"--- Current Results ---");
+			win_write_line_at(s,24,4,"-----------------------");
+			win_write_line_at(s, 26, 4, "Words guessed correctly:");
+			win_write_line_at(s,26,28, aciertos);
+			win_write_line_at(s, 28, 4, "Words guessed wrong: ");
+			win_write_line_at(s, 28, 24,errores);
 		}
 		for (l=0; l<=length; l++) {
 			currentWord[l] = '\0';
@@ -419,15 +426,32 @@ void hangman_play( hangman* hm, FILE* out, FILE* in) {
 		free(currentWord);
 		free(guessWord);
 		z++;
+		draw_board(ini,1);
 
 	}
 
 if (hm->aciertos_palabras == 4) {
-  fprintf (out, "\nCongratulations! You won the minigame!\n");
+	draw_score(ini,1);
+	win_write_line_at(s,11,4,"-----------------------");
+	win_write_line_at(s,13,4,"--- Final Results ---");
+	win_write_line_at(s,15,4,"-----------------------");
+	win_write_line_at(s, 17, 4, "Words guessed correctly:");
+	win_write_line_at(s,17,28, aciertos);
+	win_write_line_at(s, 19, 4, "Words guessed wrong: ");
+	win_write_line_at(s, 19, 24,errores);
+  return 1;
 }
 
 else if (hm->errores_palabras == 2) {
-  fprintf(out, "\nSorry! You lost the minigame. Better luck next time\n");
+	draw_score(ini,1);
+	win_write_line_at(s,11,4,"-----------------------");
+	win_write_line_at(s,13,4,"--- Final Results ---");
+	win_write_line_at(s,15,4,"-----------------------");
+	win_write_line_at(s, 17, 4, "Words guessed correctly:");
+	win_write_line_at(s,17,28, aciertos);
+	win_write_line_at(s, 19, 4, "Words guessed wrong: ");
+	win_write_line_at(s, 19, 24,errores);
+  return 0;
 }
 free(words);
 free(wrongLetters);
