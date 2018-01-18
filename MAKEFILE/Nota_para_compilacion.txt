@@ -1,0 +1,24 @@
+Aqui tienes un ejemplo de proyecto con el makefile
+
+La idea es meter todos los modulos en src junto con el main principal,
+en el makefile solo tienes que indicar el nombre del main principal que se compilara,
+es lo unico que hay que modificar manualmente el resto lo detecta solo en sus carpetas
+
+La carpeta test esta pensada para meter mains secundarios, por ejemplo si teneis
+mains para ejecutar los juegos por separado y probarlos, solo se compilan y generan los 
+ejecutables al hacer make test, se compilan junto con los modulos de src. Si no teneis
+no hace falta que tengas la carpeta test simplemente al hacer make test no hara nada.
+
+En include metes las cabeceras, no hace falta que al poner los includes pongas nada del estilo "#include ../include/asd.h"
+pues se le dice a gcc que busque en esa carpeta y funcionaria poniendo #include "asd.h" (en realidad funciona de las dos formas)
+
+Todos los .o y .d los genera en la carpeta obj/ para que no se llene todo de ficheros molestos, cuando se hace make clean
+se borra la carpeta si esta vacia y luego se genera si hace falta al hacer otro make
+
+La carpeta misc esta pensada para meter todo lo demas que no sea codigo, como el archivo de configuracion de astyle o ficheros de los que 
+lean los ejecutables
+
+Ademas si haces "make nombre_ejecutable" se compilara unicamente lo necesario para generar ese ejecutable
+
+Con "make zip" puedes comprimir rapidamente todo el proyecto, hay una variable para definir el nombre del zip generado
+
