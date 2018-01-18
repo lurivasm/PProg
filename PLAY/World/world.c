@@ -70,3 +70,45 @@ int minigames(World *w){
 Player* get_player(World *w){
   return w->p;
 }
+
+
+
+
+
+void save(World *w,int num){
+  FILE *f;
+  if(num == 1) f = fopen("1_game.txt","w");
+  if(num == 2) f = fopen("2_game.txt","w");
+  if(num == 3) f = fopen("3_game.txt","w");
+
+  fprintf(f,"%s %d %d %d %d %d %d %d %d %d %d",get_name(w->p),get_alcohol(w->p),w->played[0],w->played[1],w->played[2],w->played[3],w->played[4],w->played[5],w->played[6],w->played[7],w->minigames);
+  fclose(f);
+}
+
+
+void load(World* w,int num){
+  FILE *f;
+  if(num == 1) f = fopen("1_game.txt","r");
+  if(num == 2) f = fopen("2_game.txt","r");
+  if(num == 3) f = fopen("3_game.txt","r");
+
+  char* t = (char*)malloc(sizeof(char)*20);
+  fscanf(f,"%s",t);
+  write_name(w->p,t);
+
+  int alcohol;
+  fscanf(f,"%d",&alcohol);
+  set_alcohol(w->p,alcohol);
+
+  int i,n;
+  for(i = 0; i < 8 ; i++){
+    fscanf(f,"%d",&n);
+    w->played[i] = n;
+  }
+
+  fscanf(f,"%d",&n);
+  w->minigames = n;
+
+
+  fclose(f);
+}

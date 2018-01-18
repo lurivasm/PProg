@@ -2,6 +2,8 @@
 #define PLAYER_H
 
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #define ERR -1
 #define OK (!(ERR))
 typedef struct _player Player;
@@ -12,10 +14,13 @@ void delete_player(Player* pl);
 /*Delete a current player*/
 int modify_alcohol(Player* pl,int mod);
 /*Increase or decrease the alcohol parameter*/
+int get_alcohol(Player* pl);
+/*returns the actual value of alcohol*/
+void set_alcohol(Player *pl,int num);
+
 int is_dead(Player* pl);
 /*Informs about player's life (-1=Dead,0=Alive)*/
-int change_state(Player* pl,int modifier);
-/*Change player's state*/
-int player_state(Player *pl);
-/*Returns Player state*/
+void write_name(Player* pl,char* nam);
+
+char* get_name(Player *pl);
 #endif

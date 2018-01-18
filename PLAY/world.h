@@ -1,8 +1,9 @@
 #ifndef WORLD_H
 #define WORLD_H
 
-#include "interface.h"
+
 #include "player.h"
+#include "interface.h"
 
 typedef struct{
   int played[8];
@@ -19,6 +20,12 @@ char* get_station(World *w);
 int minigames(World* w); /* Returns the minigames played*/
 
 Player* get_player(World *w);
+
+
+
+void save(World *w,int num);
+void load(World* w,int num);
+
 
 
 #endif

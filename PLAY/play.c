@@ -7,18 +7,14 @@
 #include <unistd.h>
 
 
-#include <termios.h>
-#include <pthread.h>
-#include "world.h"
-#include "blackjack.h"
-#include "dani.h"
+#include "play.h"
 
 struct termios initial;
 
 
 
 
-void main(){
+int play(World *w/*,Interface *i*/){
   Interface* i;
   World *w;
   int m;

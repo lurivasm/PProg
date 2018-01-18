@@ -30,8 +30,20 @@ Player* create_player(){
    return pl->alcohol;
  }
 
+ void set_alcohol(Player *pl,int num){
+   pl->alcohol = num;
+ }
+
  int is_dead(Player* pl){
    if (pl==NULL) return ERR;
    if (pl->alcohol==100) return -1;
    return 0;
+ }
+
+ void write_name(Player *pl,char* nam){
+   strcpy(pl->name,nam);
+ }
+
+ char* get_name(Player *pl){
+   return pl->name;
  }
