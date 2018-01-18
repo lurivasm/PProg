@@ -17,7 +17,7 @@ int draw_card(sc_rectangle* b,int row ,int column ,char *value){
   return 1;
 }
 
-int  main_Blackjack(Interface *i){
+int main_Blackjack(Interface *i){
 
 
 	int quit,res;

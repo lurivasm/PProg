@@ -17,10 +17,10 @@ int draw_card(sc_rectangle* b,int row ,int column ,char *value){
   return 1;
 }
 
-void main_Blackjack(Interface *i){
+int  main_Blackjack(Interface *i){
 
 
-	int quit;
+	int quit,res;
 	char** board;
 
 	int sizeb[2],mode;
@@ -54,14 +54,7 @@ void main_Blackjack(Interface *i){
 	/*pressing q it exits*/
 	if (quit == 'q')  return;
 	/*if you press the space bar,you move foward*/
-	if(quit == 32){
-		int k;
-		for(k = 0;k<sizeb[0];k++){
-			free(board[k]);
-		}
-		free(board);
-		break;
-	}
+	if(quit == 32) break;
 	}
 /*we create the new map,and draw it in board*/
 	board = create_map("sala",sizeb);
@@ -76,10 +69,10 @@ void main_Blackjack(Interface *i){
 		break;
 }
 /*depending on the game mode,we call a different function*/
-if(mode == 'e') Blackjack(i);
-if(mode == 'h') Blackjack_hard(i);
+if(mode == 'e') res = Blackjack(i);
+if(mode == 'h') res = Blackjack_hard(i);
 
-return;
+return res;
 }
 
 

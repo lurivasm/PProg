@@ -140,6 +140,7 @@ void main(){
           break;
       }
 
+      if(get_alcohol(pl) == 100) return -1;
       set_player(i,'J',4,83);
       set_board(i,board,sizeb[0],sizeb[1]);
       draw_board(i,1);

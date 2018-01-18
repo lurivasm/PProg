@@ -13,10 +13,10 @@ typedef struct{
 World* create_world();
 
 int read_played(World *w, int pos);
-int write_played(World *w, int pos); /*Set the minigame pos as played,and increases the played minigames counter(w->minigames) */
+void write_played(World *w, int pos); /*Set the minigame pos as played,and increases the played minigames counter(w->minigames) */
 
 char* get_station(World *w);
-
+int minigames(World* w); /* Returns the minigames played*/
 
 Player* get_player(World *w);
 

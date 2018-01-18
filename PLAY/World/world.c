@@ -7,7 +7,7 @@ World* create_world(){
   w = (World*)malloc(sizeof(World));
 
   w->p = create_player();
-  for(i = 0;i < 8 ; i++) w->played[i] = 0;   /*Sets the list of played minigames with all 0(means you havent't played any mimigame yet*/)
+  for(i = 0;i < 8 ; i++) w->played[i] = 0;   /*Sets the list of played minigames with all 0(means you havent't played any mimigame yet*/
   w->minigames = 0;  /*sets the number of minigames played to 0*/
   return w;
 }
@@ -25,13 +25,15 @@ void write_played(World *w, int pos){ /*Set the minigame pos as played,and incre
  play all minigames(8),yo?ll finally get  to the 7 station*/
 char* get_station(World *w){
   int aleat;
-  char name[20];
+  char *name;
+  name = (char*)malloc(sizeof(char)*30);
   if(w->minigames < 4) aleat = rand()%7;
   if(w->minigames == 4) aleat = rand()%8;
   if(w->minigames == 5) aleat = 1 +rand()%7;
   if(w->minigames == 6) aleat = 3 + rand()%5;
   if(w->minigames == 7) aleat = 5 + rand()%3;
   if(w->minigames == 8) aleat = 7;
+
 
   switch (aleat) {
     case 0:
@@ -61,6 +63,9 @@ char* get_station(World *w){
   }
 }
 
+int minigames(World *w){
+  return w->minigames;
+}
 
 Player* get_player(World *w){
   return w->p;
