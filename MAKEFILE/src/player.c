@@ -22,6 +22,10 @@ Player* create_player(){
 
  int modify_alcohol(Player* pl,int mod){
    if (pl==NULL||mod>100||mod<-100) return ERR;
+   if(pl->alcohol+mod < 0){
+     pl->alcohol=0;
+     return OK;
+   }
    pl->alcohol=pl->alcohol+mod;
    return OK;
  }

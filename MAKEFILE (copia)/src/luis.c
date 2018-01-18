@@ -144,14 +144,12 @@ int play_luis (Interface *i){
 		fflush(stdout);
 		if (i == NULL) return -1;
 
-		score = create_map("score",sizes);
-		text = create_map("text",sizet);
 		board = create_map("begining.txt",sizeb);
 
-		set_score(i,score,sizes[0],sizes[1]);
+
 		draw_score(i,1);
 
-		set_text(i,text,sizet[0],sizet[1]);
+		
 		draw_text(i,1);
 
 		set_board(i,board,sizeb[0],sizeb[1]);
@@ -251,12 +249,7 @@ int play_luis (Interface *i){
 		for(j = 0;j<sizeb[0];j++){
 			free(board[j]);
 		}
-		for(j = 0;j<sizet[0];j++){
-			free(text[j]);
-		}
-		for(j = 0;j<sizes[0];j++){
-			free(score[j]);
-		}
+
 		pthread_cancel(pth);
 
 		free(board);

@@ -11,6 +11,8 @@
 #include "luis.h"
 #include "lucia.h"
 #include "juan.h"
+#include "hangman.h"
+#include "javiti.h"
 
 
 int play(World *w ,Interface *i);

@@ -75,8 +75,6 @@ int play_mane(Interface *i){
 	int nextcol,nextrow;
 	int *place;
 	char** board;
-	char** score;
-	char** text;
 	sc_rectangle* t, *s;
 	char p[280];
 
@@ -85,15 +83,13 @@ int play_mane(Interface *i){
 	fflush(stdout);
 	if (i == NULL) return -1;
 
-	score = create_map("score",sizes);
-	text = create_map("text",sizet);
 	board = create_map("beginin.txt",sizeb);
 
 
-	set_score(i,score,sizes[0],sizes[1]);
+
 	draw_score(i,1);
 
-	set_text(i,text,sizet[0],sizet[1]);
+
 	draw_text(i,1);
 
 	set_board(i,board,sizeb[0],sizeb[1]);
@@ -196,20 +192,7 @@ int play_mane(Interface *i){
 
 	}
 
-	int j;
-	for(j = 0;j<sizeb[0];j++){
-		free(board[j]);
-	}
-	for(j = 0;j<sizet[0];j++){
-		free(text[j]);
-	}
-	for(j = 0;j<sizes[0];j++){
-		free(score[j]);
-	}
-
-	free(board);
-	free(text);
-	free(score);
+	
 	if (done == 5) return 1;
 	if (fail == 3) return 0;
 	return -2;

@@ -177,7 +177,7 @@ int Blackjack_hard(Interface *i,World *w) {
              }
 
              if(card != 'n' && card != 'y' && card != 'q') continue;
-             if(card == 'q') return 0;
+             if(card == 'q') return 1;
              else break;
            }
            cc++;
@@ -427,7 +427,7 @@ int Blackjack_hard(Interface *i,World *w) {
              }
 
              if(card != 'n' && card != 'y' && card != 'q') continue;
-             if(card == 'q') return 0;
+             if(card == 'q') return 1;
              else break;
            }
            cc++;

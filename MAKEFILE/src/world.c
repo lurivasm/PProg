@@ -86,14 +86,14 @@ void save(World *w,int num){
 }
 
 
-void load(World* w,int num){
+int load(World* w,int num){
   FILE *f;
   if(num == 1) f = fopen("1_game.txt","r");
   if(num == 2) f = fopen("2_game.txt","r");
   if(num == 3) f = fopen("3_game.txt","r");
 
   char* t = (char*)malloc(sizeof(char)*20);
-  fscanf(f,"%s",t);
+  if(fscanf(f,"%s",t) <= 0) return -1;
   write_name(w->p,t);
 
   int alcohol;

@@ -130,7 +130,7 @@ int Juan(Interface *in){
 
 	sprintf(errchar, "%d", errs);
 	win_write_line_at(s, 22, 12, errchar);
-	win_write_line_at(b, 12, 35, "You have 10 seconds to read the rules");
+	win_write_line_at(b, 12, 35, "You have 7 seconds to read the rules");
 	usleep(7000000);
 	win_write_line_at(b, 12, 35, "                                     ");
 
@@ -143,7 +143,7 @@ int Juan(Interface *in){
 		col = number_rand(22, 69);
 		fila = number_rand(12, 20);
 		win_write_line_at(b, fila, col, numchar);
-		usleep(600000);
+		usleep(400000);
 		win_write_line_at(b, fila, col, "      ");
 
 		if(number == -1) return ERR;

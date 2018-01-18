@@ -260,22 +260,7 @@ int dani(Interface *i){
 
     usleep(2000000);
     draw_text(i,1);
-    while(1){
-      win_write_line_at(t,4,4,"Do you want to play again?[y,n]: ");
-      again = _read_key();
-      if(again != 'y' && again != 'n') continue;
-      if(again == 'y'){
-        pthread_cancel(pth1);
-        pthread_cancel(pth2);
-        pthread_cancel(pth3);
-        pthread_cancel(pth4);
-        pthread_cancel(pth5);
-        draw_text(i,1);
-        goto play;
-      }
-      break;
-    }
-    draw_text(i,1);
+    
 
     if(lives == 0) return 0;
     return 1;
