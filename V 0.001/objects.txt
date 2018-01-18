@@ -1,7 +1,0 @@
-Beer 10
-Jagger 20
-Absent 30
-Water -10
-Sneakers -20
-VomitPill -30
-Clarinet -50
