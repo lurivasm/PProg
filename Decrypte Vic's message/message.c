@@ -15,10 +15,98 @@ struct _game{
 struct termios initial;
 
 
+int main_vic(Interface *i){
+	int quit, game;
+	int k;
+	char** board;
+	int sizeb[2];
+
+
+ /*We create the maps for the board,score and text and set them on the interface*/
+	board = create_map("vic.txt",sizeb);
+
+	set_board(i, board, sizeb[0], sizeb[1]);
+	draw_board(i, 1);
+
+	/*_term_init();*/
+
+	sc_rectangle* t;
+ 	t = get_text(i);
+ 	if(!t) return;
+
+	win_write_line_at(t,4,4,"Press the space bar to continue");
+
+	printf("\e[?25l");
+  fflush(stdout);
+
+	while(1){
+		quit = _read_key();
+		/*pressing q it exits*/
+		if (quit == 'q') {
+			inter_delete(i);
+	    tcsetattr(fileno(stdin), TCSANOW, &initial);	/*We now restore the settings we back-up'd
+								  so that the termial behaves normally when
+								  the program ends */
+	    return;
+	  }
+		/*if you press the space bar,you move foward*/
+		if(quit == 32){
+			int k;
+			for(k = 0; k < sizeb[0]; k++){
+				free(board[k]);
+			}
+			free(board);
+			break;
+		}
+	}
+
+/*We create the new map,and draw it in board*/
+	board = create_map("vic_board.txt",sizeb);
+	set_board(i, board, sizeb[0], sizeb[1]);
+	draw_board(i, 1);
+	draw_text(i, 1);
+
+	/*We call the game*/
+ game = Juan(i);
+
+	if(game == LOOSE){
+		for(k = 0; k < sizeb[0]; k++){
+			free(board[k]);
+		}
+		free(board);
+
+		board = create_map("looser.txt",sizeb);
+		set_board(i, board, sizeb[0], sizeb[1]);
+		draw_board(i, 1);
+	}
+
+	if (game == WIN){
+		for(k = 0; k < sizeb[0]; k++){
+			free(board[k]);
+		}
+		free(board);
+
+		board = create_map("winner.txt",sizeb);
+		set_board(i, board, sizeb[0], sizeb[1]);
+		draw_board(i, 1);
+		win_write_line_at(t,4,4,"Thanks for playing!");
+	}
+
+	tcsetattr(fileno(stdin), TCSANOW, &initial);
+	for(k = 0; k < sizeb[0]; k++){
+		free(board[k]);
+	}
+
+	free(board);
+
+	return;
+}
+
 /***************************************************************/
+/*Last game*/
 int Vic(Interface *in){
     char f[3];
-    int fails, i, comp, fila, cont = 0;
+    int fails, i, comp, fila, cont = 0, number;
     char *answer;
     Game *g;
 
@@ -28,7 +116,7 @@ int Vic(Interface *in){
     s = get_score(in);
     b = get_board(in);
 
-
+    srand(time(NULL));
     win_write_line_at(s, 4, 4,"         RULES");
     win_write_line_at(s, 6, 4," Respect capital letters");
     win_write_line_at(s, 8, 4,"There are strange things");
@@ -51,10 +139,29 @@ int Vic(Interface *in){
     if(!answer) return ERR;
 
     /*We choose the file of Vic's sentences randomly*/
-    g = game_ini("messages.txt");
-    if(!g) {
-      free(answer);
-      return ERR;
+    number = number_rand(1, 3);
+    if(number == 1){
+      g = game_ini("messages.txt");
+      if(!g) {
+        free(answer);
+        return ERR;
+      }
+    }
+
+    else if(number == 2){
+      g = game_ini("messages1.txt");
+      if(!g) {
+        free(answer);
+        return ERR;
+      }
+    }
+
+    else if(number == 3){
+      g = game_ini("messages2.txt");
+      if(!g) {
+        free(answer);
+        return ERR;
+      }
     }
 
 
@@ -107,7 +214,7 @@ int Vic(Interface *in){
         if(g->incorrect == 3){
           win_write_line_at(b, fila, 3, "Ohh f*** offu idsiot xddd");
           usleep(2000000);
-        
+
           free(g);
           free(answer);
           return LOOSE;
@@ -128,6 +235,14 @@ int Vic(Interface *in){
 }
 
 /***************************************************************/
+/*Random function*/
+int number_rand(int min, int max){
+  return min+(rand()%(max-min+1));
+}
+
+
+/***************************************************************/
+/*Initialization of a message*/
 Message *message_ini(){
   Message *m = (Message*)malloc(sizeof(Message));
   if(!m) return NULL;
@@ -139,6 +254,7 @@ Message *message_ini(){
 
 
 /***************************************************************/
+/*Destruction of messages*/
 void message_destroy(Message *m){
   if(!m) return;
   if(!m->coded){
@@ -164,6 +280,7 @@ void message_destroy(Message *m){
 
 
 /***************************************************************/
+/*Destruction of an array of messages*/
 void message_array_destroy(Message **m){
   if(!m) return;
   int i;
@@ -174,6 +291,7 @@ void message_array_destroy(Message **m){
 
 
 /***************************************************************/
+/*Read from the file and set the messages and their numbers*/
 int message_set(Message **m, char *file){
   if(!file) return ERR;
   int i = 0, j;
@@ -249,6 +367,7 @@ int message_compare(Message *m, char* answer){
 
 
 /***************************************************************/
+/*Inicialization of a game struct with the array of sentences*/
 Game *game_ini(char *file){
   if(!file) return NULL;
 
@@ -264,6 +383,7 @@ Game *game_ini(char *file){
 }
 
 /***************************************************************/
+/*The minigame without interface*/
 int message_game(char *file){
   if(!file) return ERR;
 
