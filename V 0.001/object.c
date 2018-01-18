@@ -1,86 +1,64 @@
 #include "object.h"
 
  struct _object {
-  Type t;                 /*Type of object*/
-  int take;                /*Can it be taken? 0 = NO, 1 = YES*/
-  int use;                 /*Can we use it? 0 = NO, 1 = YES*/
-  int quantity;         /*-x(decrease)/ 0(nothing)/ 1(increase)*/
+  char name[12];        /* Name of object*/
+  int quantity;         /*-x(decrease)/ +x(increase)*/
 };
 
 
-Object *object_ini(void){
-  Object *o;
+Object **object_ini(void){
+  Object **o;
   int i;
 
-  o = (Object*)malloc(sizeof(Object));
+  o = (Object**)malloc(sizeof(Object*)*7);
   if(!o) return NULL;
 
-  o->take = ERROR;
-  o->t = ERROR;
-  o->quantity = ERROR;
+  for(i = 0; i < 7, i++) o[i] = (Object*)malloc(sizeof(Object));
+
+  strcpy(o[0]->name, "Beer");
+  o[0]->quantity = 10;
+
+  strcpy(o[1]->name, "Jagger");
+  o[1]->quantity = 20;
+
+  strcpy(o[2]->name, "Absent");
+  o[2]->quantity = 30;
+
+  strcpy(o[3]->name, "Water");
+  o[3]->quantity = -10;
+
+  strcpy(o[4]->name, "Sneakers");
+  o[4]->quantity = -20;
+
+  strcpy(o[5]->name, "VomitPill");
+  o[5]->quantity = -30;
+
+  strcpy(o[6]->name, "Clarinet");
+  o[6]->quantity = -50;
+
   return o;
 }
 
-void object_destroy(Object *o){
+/*Destruction of the array of objects objects*/
+void object_destroy(Object **o){
+  int i;
   if(!o) return;
+  for(i = 0; i < 7, i++) free(o[i]);
   free(o);
   return;
 
 }
 
 
-Object *object_set(Object *o, Type t, int q, int take, int use){
-  if(!o || t == ERROR || (take != 1 && take != 0) || (use != 0 && use != 1) || q == ERROR) return NULL;
-
-  int i;
-
-  o->take = take;
-  o->t = t;
-  o->use = use;
-  o->quantity = q;
-  return o;
-}
-
-
-Object *object_read(Object *o, char *name, int key){
-  FILE *file = NULL;
-  int key_aux, type_aux, q_aux, take_aux, use_aux;
-
-  file = fopen(name, "r");
-  if(!file) return NULL;
-
-  while(!feof(file)){
-    fscanf(file, "%d %d %d %d %d", &key_aux, &type_aux, &q_aux, &take_aux, &use_aux);
-    if(key_aux == key) break;
-  }
-
-  o = object_set(o, type_aux, q_aux, take_aux, use_aux);
-  if(!o) return NULL;
-
-  return o;
-}
-
-
-Type object_type(Object *o){
+/*Returns the name of an object*/
+char *object_name(Object *o){
   if(!o) return ERROR;
-  return o->t;
+  return o->name;
 }
 
 
-int object_use(Object *o){
-  if(!o) return ERROR;
-  return o->use;
-}
-
-
-int object_take(Object *o){
-  if(!o) return ERROR;
-  return o->take;
-}
-
-
+/*Returns how much the object increases or decreases your life*/
 int object_quantity(Object *o){
   if(!o) return ERROR;
   return o->quantity;
 }
-
