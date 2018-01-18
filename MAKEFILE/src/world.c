@@ -20,6 +20,11 @@ void write_played(World *w, int pos){ /*Set the minigame pos as played,and incre
   w->minigames ++;
 }
 
+void set_name_player(World *w, char *name){
+    write_name(w->p,name);
+    return;
+}
+
 /*Returns the name of the station you're in. A station can appear more than once.Before you have played at least 4 minigames
  you can't get to the station 7(final station).FRom the 4 minigame you can get to the 7 station,and in the worst case,where you
  play all minigames(8),yo?ll finally get  to the 7 station*/
@@ -86,14 +91,14 @@ void save(World *w,int num){
 }
 
 
-void load(World* w,int num){
+int load(World* w,int num){
   FILE *f;
   if(num == 1) f = fopen("1_game.txt","r");
   if(num == 2) f = fopen("2_game.txt","r");
   if(num == 3) f = fopen("3_game.txt","r");
 
   char* t = (char*)malloc(sizeof(char)*20);
-  fscanf(f,"%s",t);
+  if(fscanf(f,"%s",t) <= 0) return -1;
   write_name(w->p,t);
 
   int alcohol;

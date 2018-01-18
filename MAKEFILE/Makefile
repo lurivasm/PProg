@@ -48,7 +48,7 @@ ARTISTIC_STYLE_OPTIONS ?= $(MDIR)/.astylerc
 ## Configuracion de las herramientas
 CC       ?= gcc
 CFLAGS   := -Iinclude -ansi -pedantic -Wall -Wextra -std=c99
-LDFLAGS  :=
+LDFLAGS  := -pthread
 RM       := rm -fvd
 
 ## Nombre del zip generado
@@ -65,7 +65,7 @@ ZFLAGS := -r
 
 ## Especificamos manualmente cuales son los archivos objetivo
 ## de make all (en la carpeta EDIR que puede coincidir con SDIR)
-EXES := prueba.c
+EXES := main.c
 
 ## Ficheros fuente objetivos del make all
 EXES := $(patsubst %,$(EDIR)/%,$(EXES))

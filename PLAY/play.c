@@ -9,7 +9,7 @@
 
 #include "play.h"
 
-struct termios initial;
+
 
 
 
@@ -42,7 +42,7 @@ int play(World *w,Interface *i){
   set_player(i,'J',11,35); /* 12 35 */
 	printf("\e[?25l");
 	fflush(stdout);
-	 _term_init();
+
 
 	  set_board(i,board,sizeb[0],sizeb[1]);
 	  draw_board(i,1);
@@ -81,7 +81,7 @@ int play(World *w,Interface *i){
     if(minigames(w) == 2) break;
 			set_player(i,' ',0,0);
 			draw_board(i,1);
-      game = rand()%2;
+      game = rand()%6;
 
       while(flag){
 
@@ -193,7 +193,5 @@ int play(World *w,Interface *i){
 	free(board);
 	free(text);
 	free(score);
-	tcsetattr(fileno(stdin), TCSANOW, &initial);	/*We now restore the settings we back-up'd
-							so that the termial behaves normally when
-							the program ends*/
+
 }
