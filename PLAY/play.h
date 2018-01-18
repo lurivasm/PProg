@@ -14,7 +14,7 @@
 #include "juan.h"
 #include "hangman.h"
 
-int play(World *w /*,Interface *i*/);
+int play(World *w ,Interface *i);
 
 
 #endif

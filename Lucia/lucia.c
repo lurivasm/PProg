@@ -2,7 +2,7 @@
 
 
 
-void main_lucia(Interface *i){
+int main_lucia(Interface *i){
 
   int quit,res = 1,lucia = 0,javiti = 0;
 	char** board;

@@ -5,7 +5,7 @@
 #include "deck.h"
 
 
-void main_lucia(Interface *i);
+int main_lucia(Interface *i);
 
 int beer(Interface *i);
 

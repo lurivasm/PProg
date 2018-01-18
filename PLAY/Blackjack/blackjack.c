@@ -17,7 +17,7 @@ int draw_card(sc_rectangle* b,int row ,int column ,char *value){
   return 1;
 }
 
-int  main_Blackjack(Interface *i){
+int  main_Blackjack(Interface *i,World *w){
 
 
 	int quit,res;
@@ -69,29 +69,34 @@ int  main_Blackjack(Interface *i){
 		break;
 }
 /*depending on the game mode,we call a different function*/
-if(mode == 'e') res = Blackjack(i);
-if(mode == 'h') res = Blackjack_hard(i);
+if(mode == 'e') res = Blackjack(i,w);
+if(mode == 'h') res = Blackjack_hard(i,w);
 
 return res;
 }
 
 
-int Blackjack_hard(Interface *i) {
+int Blackjack_hard(Interface *i,World *w) {
 
     Deck *d;
     char p[3],aux[512],c[3];
-    int croupier=0,points=0,cc,card,smoke,round,ace,column,prob;   /* cc is used to count the cards*/
+    int croupier=0,points=0,cc,card,smoke,round,ace,column,prob,javiti = 0,santi = 0;   /* cc is used to count the cards*/
     d = create_deck();
     if (!d) return 0;
     d = set_deck(d);
     if (!d) return 0;
     srand(time(NULL));
 
+    Player *p;
+    p = get_player(w);
+
     sc_rectangle *t,*s,*b;
     t = get_text(i);
     s = get_score(i);
     b = get_board(i);
     draw_text(i,1);
+    win_write_line_at(t,5,4,"The one who wins 3 rounds is the final winner");
+    usleep(2000000);
     win_write_line_at(t,4,4,"Let's start playing");
 
     win_write_line_at(s,4,4,"Your points :");
@@ -154,8 +159,9 @@ int Blackjack_hard(Interface *i) {
 
            if(points > 21){
              _move_to(t,5,4);
-             printf("You exceed 21!You lost!\n" );
+             printf("You exceed 21!You lost this round!\n" );
              cc++;
+             santi++;
              break;
            }
 
@@ -195,8 +201,8 @@ int Blackjack_hard(Interface *i) {
                break;
              }
              if(smoke == 'y'){
-
                win_write_line_at(t,7,4,"Your alcohol level decreases because of the cigarette! Now let's play");
+               modify_alcohol(p,-10);
              }
              else{
 
@@ -255,20 +261,22 @@ int Blackjack_hard(Interface *i) {
              usleep(3000000);
 
           if(croupier > 21){
-              win_write_line_at(t,5,4,"Santi exceed 21!You won!");
+              win_write_line_at(t,5,4,"Santi exceed 21!You won this round!");
+              javiti++;
           }
           else if(croupier > points){
             sprintf(aux,"Santi stands with %d points",croupier);
             win_write_line_at(t,5,4,aux);
             usleep(3000000);
-            sprintf(aux,"Santi has %d points and you have %d.You lost!",croupier,points);
+            sprintf(aux,"Santi has %d points and you have %d.You lost this round!",croupier,points);
             win_write_line_at(t,6,4,aux);
+            santi++;
           }
           else if(croupier == points){
               sprintf(aux,"Santi stands with %d points",croupier);
               win_write_line_at(t,5,4,aux);
               usleep(3000000);
-              sprintf(aux,"You and Santi have the same points(%d).It's a draw.Let's play again",points);
+              sprintf(aux,"You and Santi have the same points(%d).It's a draw.Let's play this round again",points);
               win_write_line_at(t,5,4,aux);
 
               draw_score(i,1);
@@ -280,34 +288,34 @@ int Blackjack_hard(Interface *i) {
             sprintf(aux,"Santi stands with %d points",croupier);
             win_write_line_at(t,5,4,aux);
             usleep(3000000);
-            sprintf(aux,"Santi has %d points and you have %d.You won!",croupier,points);
+            sprintf(aux,"Santi has %d points and you have %d.You won this round!",croupier,points);
+            javiti++;
             win_write_line_at(t,6,4,aux);
           }
         }
         usleep(3000000);
-        while(1){
-          draw_text(i,1);
-          _move_to(t,4,4);
-          printf("Do you want to play again?[y/n]: ");
-          round = _read_key();
-          if(round != 'y' && round != 'n') continue;
-          if(card == 'q') return 0;
-          break;
-        }
-        if(round == 'y'){
-          cc = 0;
-          draw_score(i,1);
-          win_write_line_at(s,4,4,"Your points :");
-          win_write_line_at(s,6,4,"Santi's points :");
-          continue;
-        }
-        else break;
+        if(javiti == 3 || santi == 3) break;
     }
-    delete_deck(d);
-    draw_text(i,1);
-    _move_to(t,4,4);
-    printf("Thanks for playing!");
-    return 1;
+
+    if(javiti > santi) {
+      win_write_line_at(t,4,4,"YOU WON");
+      delete_deck(d);
+      draw_text(i,1);
+      _move_to(t,5,4);
+      printf("Thanks for playing!");
+      usleep(3000000);
+      return 4;
+    }
+    if(javiti < santi) {
+      win_write_line_at(t,4,4,"YOU LOOSE");
+      delete_deck(d);
+      draw_text(i,1);
+      _move_to(t,5,4);
+      printf("Thanks for playing!");
+      usleep(3000000);
+      return 3;
+    }
+
   }
 
 
@@ -316,25 +324,31 @@ int Blackjack_hard(Interface *i) {
 
 
 
-  int Blackjack(Interface *i){
+  int Blackjack(Interface *i,World *w){
     Deck *d;
     char p[3],aux[512],c[3];
-    int croupier=0,points=0,cc,card,smoke,round,ace,column;   /* cc is used to count the cards*/
+    int croupier=0,points=0,cc,card,smoke,round,ace,column,javiti = 0,santi = 0;   /* cc is used to count the cards*/
     d = create_deck();
     if (!d) return 0;
     d = set_deck(d);
     if (!d) return 0;
     srand(time(NULL));
 
+    Player *p;
+    p = get_player(w);
+
     sc_rectangle *t,*s,*b;
     t = get_text(i);
     s = get_score(i);
     b = get_board(i);
     draw_text(i,1);
+    win_write_line_at(t,5,4,"The one who wins 3 rounds is the final winner");
+    usleep(2000000);
     win_write_line_at(t,4,4,"Let's start playing");
 
     win_write_line_at(s,4,4,"Your points :");
     win_write_line_at(s,6,4,"Santi's points :");
+
 
 
 
@@ -352,6 +366,8 @@ int Blackjack_hard(Interface *i) {
         if (!d) return 0;
         points=0;
         column =12 ;
+
+
 
         while(1){
            draw_text(i,1);
@@ -393,7 +409,8 @@ int Blackjack_hard(Interface *i) {
 
            if(points > 21){
              _move_to(t,5,4);
-             printf("You exceed 21!You lost!\n" );
+             printf("You exceed 21!You lost this round!\n" );
+             santi++;
              cc++;
              break;
            }
@@ -434,8 +451,8 @@ int Blackjack_hard(Interface *i) {
                break;
              }
              if(smoke == 'y'){
-
                win_write_line_at(t,7,4,"Your alcohol level decreases because of the cigarette! Now let's play");
+               modify_alcohol(p,-10);
              }
              else{
 
@@ -476,20 +493,22 @@ int Blackjack_hard(Interface *i) {
              usleep(3000000);
 
           if(croupier > 21){
-              win_write_line_at(t,5,4,"Santi exceed 21!You won!");
+              win_write_line_at(t,5,4,"Santi exceed 21!You won this round!");
+              javiti++;
           }
           else if(croupier > points){
             sprintf(aux,"Santi stands with %d points",croupier);
             win_write_line_at(t,5,4,aux);
             usleep(3000000);
-            sprintf(aux,"Santi has %d points and you have %d.You lost!",croupier,points);
+            sprintf(aux,"Santi has %d points and you have %d.You lost this round!",croupier,points);
+            santi++;
             win_write_line_at(t,6,4,aux);
           }
           else if(croupier == points){
               sprintf(aux,"Santi stands with %d points",croupier);
               win_write_line_at(t,5,4,aux);
               usleep(3000000);
-              sprintf(aux,"You and Santi have the same points(%d).It's a draw.Let's play again",points);
+              sprintf(aux,"You and Santi have the same points(%d).It's a draw.Let's play  this round again",points);
               win_write_line_at(t,5,4,aux);
 
               draw_score(i,1);
@@ -501,33 +520,35 @@ int Blackjack_hard(Interface *i) {
             sprintf(aux,"Santi stands with %d points",croupier);
             win_write_line_at(t,5,4,aux);
             usleep(3000000);
-            sprintf(aux,"Santi has %d points and you have %d.You won!",croupier,points);
+            sprintf(aux,"Santi has %d points and you have %d.You won this round!",croupier,points);
+            javiti++;
             win_write_line_at(t,6,4,aux);
           }
         }
         usleep(3000000);
-        while(1){
-          draw_text(i,1);
-          _move_to(t,4,4);
-          printf("Do you want to play again?[y/n]: ");
-          round = _read_key();
-          if(round != 'y' && round != 'n') continue;
-          if(card == 'q') return 0;
-          break;
-        }
-        if(round == 'y'){
-          cc = 0;
-          draw_score(i,1);
-          win_write_line_at(s,4,4,"Your points :");
-          win_write_line_at(s,6,4,"Santi's points :");
-          continue;
-        }
-        else break;
+        if(javiti == 3 || santi == 3) break;
+        draw_text(i,1);
+        win_write_line_at(t,4,4,"Let's head to the next round");
+        usleep(3000000);
     }
-    delete_deck(d);
-    draw_text(i,1);
-    _move_to(t,4,4);
-    printf("Thanks for playing!");
-    return 1;
+
+    if(javiti > santi) {
+      win_write_line_at(t,4,4,"YOU WON");
+      delete_deck(d);
+      draw_text(i,1);
+      _move_to(t,5,4);
+      printf("Thanks for playing!");
+      usleep(3000000);
+      return 1;
+    }
+    if(javiti < santi) {
+      win_write_line_at(t,4,4,"YOU LOOSE");
+      delete_deck(d);
+      draw_text(i,1);
+      _move_to(t,5,4);
+      printf("Thanks for playing!");
+      usleep(3000000);
+      return 0;
+    }
 
   }
