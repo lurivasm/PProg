@@ -14,6 +14,8 @@
 
 typedef struct _hangman hangman;
 
+int main_hangman(Interface *i);
+
 hangman* hangman_ini(char* file1);
 
 void hangman_destroy(hangman* hm);
