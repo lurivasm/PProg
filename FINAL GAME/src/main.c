@@ -219,15 +219,11 @@ int initiate_world(Interface *i,World *w){
     sloto:  win_write_line_at(t,4,4,"Introduce the number of the slot: ");
             fscanf(stdin,"%d",&slot);
 						if(slot <=0 || slot > 3) goto sloto;
-            load(w,slot);
-						Player *pl;
-						pl = get_player(w);
-						name = get_name(pl);
-						sprintf(query,"It's %s your name? [y/n]: ",name);
-						win_write_line_at(t,5,4,query);
-						slot = _read_key();
-						draw_text(i,1);
-						if(slot == 'n') goto sloto;
+            if(load(w,slot) == -1){
+              draw_text(i,1);
+              goto sloto;
+            }
+            
             return 0;
           case 15:
             draw_text(i,1);
@@ -277,7 +273,7 @@ void main(){
 		usleep(5000000);
 		goto wearetheworld;
 	}
-  inter_delete(i);
+    inter_delete(i);
 
 	for(j = 0;j<sizeb[0];j++){
 		free(board[j]);
