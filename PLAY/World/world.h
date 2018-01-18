@@ -12,6 +12,8 @@ typedef struct{
 
 World* create_world();
 
+void set_name_player(World *w, char *name);
+
 int read_played(World *w, int pos);
 void write_played(World *w, int pos); /*Set the minigame pos as played,and increases the played minigames counter(w->minigames) */
 

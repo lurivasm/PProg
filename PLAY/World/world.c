@@ -12,6 +12,11 @@ World* create_world(){
   return w;
 }
 
+void set_name_player(World *w, char *name){
+    write_name(w->p,name);
+    return;
+}
+
 int read_played(World *w, int pos){  /*Returns 0 if the minigame pos wasn't palyed yet,1 if you have played it*/
   return w->played[pos];
 }
