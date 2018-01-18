@@ -2,7 +2,7 @@
 
 struct _player{
   int alcohol;
-  char name[20];
+  char name[500];
 };
 
 Player* create_player(){
@@ -46,6 +46,7 @@ Player* create_player(){
 
  void write_name(Player *pl,char* nam){
    strcpy(pl->name,nam);
+   return;
  }
 
  char* get_name(Player *pl){

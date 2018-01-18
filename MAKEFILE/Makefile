@@ -65,7 +65,7 @@ ZFLAGS := -r
 
 ## Especificamos manualmente cuales son los archivos objetivo
 ## de make all (en la carpeta EDIR que puede coincidir con SDIR)
-EXES := prueba.c
+EXES := main.c
 
 ## Ficheros fuente objetivos del make all
 EXES := $(patsubst %,$(EDIR)/%,$(EXES))

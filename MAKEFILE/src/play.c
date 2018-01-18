@@ -21,9 +21,7 @@ int play(World *w,Interface *i){
   sc_rectangle *t,*b,*s;
   Player *pl;
   char** board;
-  char** score;
-  char** text;
-  int sizeb[2],sizes[2],sizet[2];
+  int sizeb[2];
   char* name = (char*)malloc(sizeof(char)*30);
   char query[200]; /*EDAT reference haha XD lol*/
   srand(time(NULL));
@@ -34,8 +32,7 @@ int play(World *w,Interface *i){
 
   /*We create the maps for the board,score and text and set them on the interface*/
   board = create_map("mapa_metro.txt",sizeb);
-  score = create_map("score",sizes);
-  text = create_map("text",sizet);
+
 
 
   _term_init();
@@ -47,17 +44,14 @@ int play(World *w,Interface *i){
 	  set_board(i,board,sizeb[0],sizeb[1]);
 	  draw_board(i,1);
 
-	  set_score(i,score,sizes[0],sizes[1]);
 	  draw_score(i,1);
-
-	  set_text(i,text,sizet[0],sizet[1]);
 	  draw_text(i,1);
 
     b = get_board(i);
     t = get_text(i);
     s = get_score(i);
-    pl = get_player(w);
 
+    pl = get_player(w);
     sprintf(query,"Life : %d (%%)",get_alcohol(pl));
     win_write_line_at(s,4,4,query);
 
@@ -114,7 +108,7 @@ int play(World *w,Interface *i){
         }
         flag = 0;
       }
-
+      
       switch (game) {
         case 0:
           res = main_Blackjack(i,w);
@@ -172,7 +166,10 @@ int play(World *w,Interface *i){
           break;
       }
 
-      if(get_alcohol(pl) >=100) return -1;
+      if(get_alcohol(pl) >=100){
+
+         return -1;
+       }
       set_player(i,'J',4,83);
       set_board(i,board,sizeb[0],sizeb[1]);
       draw_board(i,1);
@@ -200,7 +197,7 @@ int play(World *w,Interface *i){
       usleep(2000000);
       board = create_map("tr",sizeb);
       set_board(i,board,sizeb[0],sizeb[1]);
-      set_player(i," ",0,0);
+      set_player(i,' ',0,0);
       draw_board(i,1);
       draw_score(i,1);
       usleep(5000000);
@@ -237,16 +234,10 @@ final:  win_write_line_at(t,4,4,"Oh,you got home!");
   for(j = 0;j<sizeb[0];j++){
 		free(board[j]);
 	}
-	for(j = 0;j<sizet[0];j++){
-		free(text[j]);
-	}
-	for(j = 0;j<sizes[0];j++){
-		free(score[j]);
-	}
+
 
 	free(board);
-	free(text);
-	free(score);
+
 
   tcsetattr(fileno(stdin), TCSANOW, &initial);	/*We now restore the settings we back-up'd
 							so that the termial behaves normally when

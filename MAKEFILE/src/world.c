@@ -20,6 +20,11 @@ void write_played(World *w, int pos){ /*Set the minigame pos as played,and incre
   w->minigames ++;
 }
 
+void set_name_player(World *w, char *name){
+    write_name(w->p,name);
+    return;
+}
+
 /*Returns the name of the station you're in. A station can appear more than once.Before you have played at least 4 minigames
  you can't get to the station 7(final station).FRom the 4 minigame you can get to the 7 station,and in the worst case,where you
  play all minigames(8),yo?ll finally get  to the 7 station*/
