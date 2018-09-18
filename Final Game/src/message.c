@@ -214,6 +214,7 @@ int Vic(Interface *in){
       fgets(answer, 100, stdin);
 
       if(*answer == 'q'){
+        _term_init();
         return WIN;
       }
 

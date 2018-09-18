@@ -110,7 +110,7 @@ int play(World *w,Interface *i){
         }
         flag = 0;
       }
-
+      
       switch (game) {
         case 0:
           res = main_Blackjack(i,w);
